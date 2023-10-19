@@ -3,7 +3,6 @@
 
 #include <vector.h>
 #include "expression.h"
-
 namespace ASC_bla {
 
 // choice of row or column major, for template
