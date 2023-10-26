@@ -8,7 +8,7 @@ namespace ASC_bla {
 // choice of row or column major, for template
 enum ORDERING { RowMajor, ColMajor };
 
-template <typename T, template ORD>
+template <typename T, ORDERING ORD>
 class MatrixView : public MatrixExpr<MatrixView<T>>{
  protected:
   size_t height_, width_, dist_;
