@@ -1,14 +1,15 @@
 #ifndef FILE_MATRIX_H
 #define FILE_MATRIX_H
 
-#include <vector.h>
-#include "expression.h"
+#include "vector.h"
+#include "matrix_expression.h"
+
 namespace ASC_bla {
 
 // choice of row or column major, for template
 enum ORDERING { RowMajor, ColMajor };
 
-template <typename T, ORDERING ORD>
+/* template <typename T, ORDERING ORD>
 class MatrixView : public MatrixExpr<MatrixView<T>>{
  protected:
   size_t height_, width_, dist_;
@@ -139,15 +140,16 @@ class Matrix : public MatrixView<T, ORD> {
     } 
     return *this;
   }
-};
+}; */
 
-/*
+
 template <typename T, ORDERING ORD>
-class Matrix{
+class Matrix{ //should inherit from MatrixView
   size_t height_;
   size_t width_;
   T *data_;
-
+ 
+ /*
  public:
   Matrix(size_t height, size_t width)
       : height_(height), width_(width), data_(new T[height * width]){};
@@ -250,6 +252,7 @@ Matrix transp(Matrix &A) {
 }
 
 */
+};
 
 }  // namespace ASC_bla
 

@@ -8,10 +8,10 @@ int main()
 {
   size_t m = 6;
   size_t n = 5;
-  bla::Matrix<double, bla::RowMajor> A(m, n);
+  /* bla::Matrix<double, bla::RowMajor> A(m, n);
   bla::Matrix<double, bla::ColMajor> B(m, n);
 
-  bla::Matrix<double, bla::RowMajor> C = A;
+  bla::Matrix<double, bla::RowMajor> C = A; */
   /*
   for (size_t i = 0; i < x.Size(); i++)
     {
