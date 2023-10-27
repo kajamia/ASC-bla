@@ -9,8 +9,9 @@ namespace ASC_bla {
 // choice of row or column major, for template
 enum ORDERING { RowMajor, ColMajor };
 
-/* template <typename T, ORDERING ORD>
-class MatrixView : public MatrixExpr<MatrixView<T>>{
+template <typename T, ORDERING ORD>
+class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
+{/*
  protected:
   size_t height_, width_, dist_;
   T *data_;
@@ -139,12 +140,12 @@ class Matrix : public MatrixView<T, ORD> {
       }
     } 
     return *this;
-  }
-}; */
+  }*/
+};
 
 
 template <typename T, ORDERING ORD>
-class Matrix{ //should inherit from MatrixView
+class Matrix: public MatrixView<T, ORD>{ //TODO: should inherit from MatrixView!!!
   size_t height_;
   size_t width_;
   T *data_;
