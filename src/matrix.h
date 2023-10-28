@@ -105,8 +105,9 @@ class Matrix : public MatrixView<T, ORD> {
   using BASE::width_;
   using BASE::dist_;
 
-  // (TODO expression constructor)
+  // (TODO constructor from MatrixExpr)
   // TODO move operator=
+  // optional: constructor from initializer list
 
  public:
   // constructor
@@ -148,7 +149,11 @@ class Matrix : public MatrixView<T, ORD> {
     // setting
     for (size_t i = 0; i < height_; i++){
       for (size_t j = 0; j < width_; j++){
-        data_[i] = A2(i, j);
+        if (ORD == RowMajor) {
+          data_[i*width_ + j] = A2(i, j);
+        } else {
+          data_[j*height_ + i] = A2(i, j);
+        }
       }
     } 
     return *this;
@@ -157,8 +162,8 @@ class Matrix : public MatrixView<T, ORD> {
 };
 
 // output stream operator
-template <typename ...Args>
-std::ostream & operator<< (std::ostream & ost, const MatrixView<Args...> & A){
+template <typename T, ORDERING ORD>
+std::ostream & operator<< (std::ostream & ost, const MatrixView<T, ORD> & A){
   if ((A.width() > 0) && (A.height() > 0)){
     for (size_t j = 0; j < A.width(); j++){
       ost << "(";
@@ -166,7 +171,7 @@ std::ostream & operator<< (std::ostream & ost, const MatrixView<Args...> & A){
         // matrix elements are separated by tabs
         ost << A(i, j) << "\t";
       }
-      ost << ")";
+      ost << ")" << std::endl;
     }
   }else{
     ost << "empty matrix";
