@@ -7,10 +7,12 @@
 #include "vector.h"
 #include "matrix_expression.h"
 
+
 namespace ASC_bla {
 
 // choice of row or column major, for template
 enum ORDERING { RowMajor, ColMajor };
+
 
 template <typename T, ORDERING ORD>
 class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
@@ -19,14 +21,12 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   size_t height_, width_, dist_;
   T *data_;
 
-  // (TODO operator= for scalars)
-  // TODO View()
   // TODO Row()
   // TODO Col()
   // TODO Rows()
   // TODO Cols()
   // TODO Transpose(MatrixView) (outside of MatrixView)
-  // TODO (MatrixView) (outside of MatrixView)
+  // TODO Inverse(MatrixView) (outside of MatrixView)
 
  public:
   // constructor
@@ -43,7 +43,6 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   MatrixView(const MatrixView<T, ORD> & A)
     : height_(A.height_), width_(A.width_), dist_(A.dist_), data_(A.data_) {;}
   
-
   // assignment operator
   template <typename TB>
   MatrixView &operator=(const MatrixExpr<TB> &M) {
@@ -59,21 +58,24 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     return *this;
   }
 
-/*
-  MatrixView &operator=(T scal) {
+  // set all matrix components to scal
+  MatrixView & operator= (T scal) {
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
         if (ORD == RowMajor) {
-          data_[dist_ * (i * height_ + j)] = scal;
+          data_[dist_ * i + j] = scal;
         } else {
-          data_[dist_ * (j * width_ + i)] = scal;
+          data_[dist_ * j + i] = scal;
         }
       }
     }
     return *this;
   }
 
-  auto View() const { return MatrixView(height_, width_, dist_, data_); }*/
+  // returns new view to current object
+  auto View() const { return MatrixView(height_, width_, data_); }
+
+  // returns dimensions of matrix
   size_t height() const { return this->height_; };
   size_t width() const { return this->width_; };
 
@@ -99,6 +101,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
 
 };
 
+
 template <typename T, ORDERING ORD>
 class Matrix : public MatrixView<T, ORD> {
   typedef MatrixView<T, ORD> BASE;
@@ -106,10 +109,6 @@ class Matrix : public MatrixView<T, ORD> {
   using BASE::height_;
   using BASE::width_;
   using BASE::dist_;
-
-  // (TODO constructor from MatrixExpr)
-  // TODO move operator=
-  // optional: constructor from initializer list
 
  public:
   // constructor
@@ -131,6 +130,21 @@ class Matrix : public MatrixView<T, ORD> {
       std::swap(height_, A.height_);
       std::swap(data_, A.data_);
     }
+
+  // constructor from MatrixExpr
+  template <typename TB>
+  Matrix (const MatrixExpr<TB> & B)
+    : Matrix<T, ORD> (B.height(), B.width()) {
+    
+    *this = B;
+
+    // set dist_
+    if (ORD == RowMajor){
+      dist_ = width_;
+    }else{
+      dist_ = height_;
+    }
+  }
   
   // initializer list constructor
   Matrix (size_t width, size_t height, std::initializer_list<T> list)
@@ -147,7 +161,7 @@ class Matrix : public MatrixView<T, ORD> {
       }
     }
 
-    // set dist
+    // set dist_
     if (ORD == RowMajor){
       dist_ = width;
     }else{
@@ -184,7 +198,18 @@ class Matrix : public MatrixView<T, ORD> {
     return *this;
   }
 
+  // move assignment operator
+  Matrix & operator= (Matrix && A2){
+    std::swap(height_, A2.height_);
+    std::swap(width_, A2.width_);
+    std::swap(dist_, A2.dist_);
+    std::swap(data_, A2.data_);
+
+    return *this;
+  }
+
 };
+
 
 // output stream operator (without variadic templates)
 template <typename T, ORDERING ORD>
@@ -204,7 +229,6 @@ std::ostream & operator<< (std::ostream & ost, const MatrixView<T, ORD> & A){
   ost << std::endl;
   return ost;
 }
-
 
 }  // namespace ASC_bla
 

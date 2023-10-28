@@ -6,6 +6,7 @@
 namespace ASC_bla
 {
 
+// T, in this case, is not the scalar but MatrixView<T, ORD> (and the latter T is the scalar type)
 template <typename T>
 class MatrixExpr
 { 
@@ -19,8 +20,26 @@ class MatrixExpr
   // TODO SumMatrixExpr
   // TODO MatrixProductExpr
   // TODO MatrixVectorProductExpr
-  // TODO output stream operator
 
+
+template <typename T>
+std::ostream & operator<< (std::ostream & ost, const MatrixExpr<T> & A){
+  if ((A.width() > 0) && (A.height() > 0)){
+    for (size_t j = 0; j < A.width(); j++){
+      ost << "(";
+      for (size_t i = 0; i < A.height(); i++){
+        // matrix elements are separated by tabs
+        ost << A(i, j) << "\t";
+      }
+      ost << ")" << std::endl;
+    }
+  }else{
+    ost << "empty matrix";
+  }
+  ost << std::endl;
+  return ost;
 }
+
+} // namespace ASC_bla
  
 #endif

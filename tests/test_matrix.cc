@@ -18,7 +18,8 @@ int main()
   size_t n = 5;
   bla::Matrix<double, bla::RowMajor> A(m, n);
   bla::Matrix<double, bla::ColMajor> B(m, n);
-
+  
+  A = 3.14;
   A(2, 2) = 3;
 
   bla::Matrix<double, bla::RowMajor> C = A;
@@ -39,15 +40,7 @@ int main()
 
   std::cout << E << std::endl;
 
-  /*
-  for (size_t i = 0; i < x.Size(); i++)
-    {
-      x(i) = i;
-      y(i) = 10;
-    }
+  // TODO test Matrix(const MatrixExpr<TB> & B)
+  // TODO test output stream operator
 
-  bla::Matrix<double> z = x+y;
-
-  std::cout << "x+y = " << z << std::endl;
-  */
 }
