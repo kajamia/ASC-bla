@@ -2,6 +2,7 @@
 #define FILE_MATRIX_H
 
 #include <iostream>
+#include <initializer_list>
 
 #include "vector.h"
 #include "matrix_expression.h"
@@ -41,6 +42,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   // copy constructor, for good measure
   MatrixView(const MatrixView<T, ORD> & A)
     : height_(A.height_), width_(A.width_), dist_(A.dist_), data_(A.data_) {;}
+  
 
   // assignment operator
   template <typename TB>
@@ -129,6 +131,29 @@ class Matrix : public MatrixView<T, ORD> {
       std::swap(height_, A.height_);
       std::swap(data_, A.data_);
     }
+  
+  // initializer list constructor
+  Matrix (size_t width, size_t height, std::initializer_list<T> list)
+    : MatrixView<T, ORD> (height, width, new T[list.size()]) {
+    // check if list has the right size
+    if (list.size() != height_*width_){
+      throw list.size();
+      std::cout << "err";
+      return;
+    }else{
+      // copy list
+      for (size_t i = 0; i < list.size(); i++){
+        data_[i] = list.begin()[i];
+      }
+    }
+
+    // set dist
+    if (ORD == RowMajor){
+      dist_ = width;
+    }else{
+      dist_ = height;
+    }
+  }
 
   // destructor
   ~Matrix () { delete [] data_; }
@@ -161,7 +186,7 @@ class Matrix : public MatrixView<T, ORD> {
 
 };
 
-// output stream operator
+// output stream operator (without variadic templates)
 template <typename T, ORDERING ORD>
 std::ostream & operator<< (std::ostream & ost, const MatrixView<T, ORD> & A){
   if ((A.width() > 0) && (A.height() > 0)){

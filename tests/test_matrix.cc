@@ -33,6 +33,12 @@ int main()
 
   std::cout << B <<std::endl;
 
+  bla::Matrix<double, bla::ColMajor> E(3, 2, {1, 2,
+                                              3, 4,
+                                              5, 6});
+
+  std::cout << E << std::endl;
+
   /*
   for (size_t i = 0; i < x.Size(); i++)
     {
