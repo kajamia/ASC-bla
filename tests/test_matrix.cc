@@ -36,19 +36,28 @@ try{
 
   std::cout << B <<std::endl;
 
-  bla::Matrix<double> E(3, 2, {1, 2,
-                               3, 4,
-                               5, 6});
+  bla::Matrix<double> E(4, 7, {1, 2, 3, 4, 5, 6, 7,
+                               8, 9, 10, 11, 12, 13, 14,
+                               15, 16, 17, 18, 19, 20, 21,
+                               22, 23, 24, 25, 26, 27, 28});
 
-  for (size_t i=0; i < E.height(); i++){
+  bla::Matrix<double, bla::ColMajor> F(7, 4, {1, 2, 3, 4, 5, 6, 7,
+                               8, 9, 10, 11, 12, 13, 14,
+                               15, 16, 17, 18, 19, 20, 21,
+                               22, 23, 24, 25, 26, 27, 28});
+
+  /* for (size_t i=0; i < E.height(); i++){
     std::cout << E.Row(i) << std::endl;
   }
 
   for (size_t j=0; j < E.width(); j++){
     std::cout << E.Col(j) << std::endl;
-  }  
+  } */  
 
-  std::cout << E << std::endl << E.width() << E.height() << E.transposed() << std::endl << "  󱁖" << std::endl;
+  // std::cout << E << std::endl << E.width() << E.height() << std::endl << E.transposed() << std::endl << "  󱁖" << std::endl;
+
+  std::cout << F.Rows(1, 2) << std::endl;
+
 
   // TODO test Matrix(const MatrixExpr<TB> & B)
   // TODO test output stream operator

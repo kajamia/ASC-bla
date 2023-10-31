@@ -15,7 +15,7 @@ class MatrixExpr
     size_t height() const { return Upcast().height(); }
     size_t width() const { return Upcast().width(); }
     auto operator() (size_t i, size_t j) const { return Upcast()(i, j); }
-  };
+};
 
   // TODO SumMatrixExpr
   // TODO MatrixProductExpr

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <initializer_list>
+#include <stdexcept>
 
 #include "vector.h"
 #include "matrix_expression.h"
@@ -21,17 +22,13 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   size_t height_, width_, dist_;
   T *data_;
 
-  // TODO Row()
-  // TODO Col()
-  // TODO Rows()
-  // TODO Cols()
   // TODO Inverse(MatrixView) (outside of MatrixView)
 
  public:
   // constructor
   MatrixView(size_t height, size_t width, T *data)
     : height_(height), width_(width), data_(data) {
-    if (ORD == RowMajor){
+    if constexpr (ORD == RowMajor){
       dist_ = width;
     }else{
       dist_ = height;
@@ -39,7 +36,6 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     }
   
   // constructor with dist argument
-  // unused / not widely used
   MatrixView(size_t height, size_t width, size_t dist, T *data)
     : height_(height), width_(width), dist_(dist), data_(data) {;};
   
@@ -52,7 +48,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   MatrixView &operator=(const MatrixExpr<TB> &M) {
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
-        if (ORD == RowMajor) {
+        if constexpr (ORD == RowMajor) {
           data_[dist_ * i + j] = M(i, j);
         } else {
           data_[dist_ * j + i] = M(i, j);
@@ -66,7 +62,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   MatrixView & operator= (T scal) {
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
-        if (ORD == RowMajor) {
+        if constexpr (ORD == RowMajor) {
           data_[dist_ * i + j] = scal;
         } else {
           data_[dist_ * j + i] = scal;
@@ -135,6 +131,30 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     }
   }
 
+  // returns the submatrix from row start with given height
+  MatrixView<T, ORD> Rows(size_t start, size_t height){
+
+    /* // error handling
+    if (start > stop){ throw std::out_of_range("row start index too large")};
+    if (stop >= width()){ throw std::out_of_range("row stop index out of range")}; */
+    if constexpr (ORD == RowMajor){
+      return MatrixView<T, ORD> (height, width_, dist_, (data_ + start*width_));
+    }
+    else{
+      return MatrixView<T, ORD> (height, width_, height_, (data_ + start));
+    }
+  }
+
+  // returns the submatrix from column start with given width
+  MatrixView<T, ORD> Cols(size_t start, size_t width){
+    if constexpr (ORD == RowMajor){
+      return MatrixView<T, ORD> (height_, width, width_, (data_ + start));
+    }
+    else{
+      return MatrixView<T, ORD> (height_, width, dist_, (data_ + start*height_));
+    }
+  }
+
 };
 
 
@@ -183,7 +203,7 @@ class Matrix : public MatrixView<T, ORD> {
   }
   
   // initializer list constructor
-  Matrix (size_t width, size_t height, std::initializer_list<T> list)
+  Matrix (size_t height, size_t width, std::initializer_list<T> list)
     : MatrixView<T, ORD> (height, width, new T[list.size()]) {
     // check if list has the right size
     if (list.size() != height_*width_){
@@ -198,7 +218,7 @@ class Matrix : public MatrixView<T, ORD> {
     }
 
     // set dist_
-    if (ORD == RowMajor){
+    if constexpr (ORD == RowMajor){
       dist_ = width;
     }else{
       dist_ = height;
