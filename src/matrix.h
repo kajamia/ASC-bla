@@ -25,7 +25,6 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   // TODO Col()
   // TODO Rows()
   // TODO Cols()
-  // TODO Transpose(MatrixView) (outside of MatrixView)
   // TODO Inverse(MatrixView) (outside of MatrixView)
 
  public:
@@ -38,6 +37,11 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
       dist_ = height;
     }
     }
+  
+  // constructor with dist argument
+  // unused / not widely used
+  MatrixView(size_t height, size_t width, size_t dist, T *data)
+    : height_(height), width_(width), dist_(dist), data_(data) {;};
   
   // copy constructor, for good measure
   MatrixView(const MatrixView<T, ORD> & A)
@@ -81,28 +85,60 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
 
   // round bracket access operator
   T &operator()(size_t i, size_t j) {
-    if (ORD == RowMajor) {
+    // constexpr evaluates the if-statement at compile time
+    if constexpr (ORD == RowMajor) {
       return data_[i * dist_ + j];
     }
-    if (ORD == ColMajor) {
+    if constexpr (ORD == ColMajor) {
       return data_[j * dist_ + i];
     }
   }
 
   // round bracket access operator, constant version
   const T &operator()(size_t i, size_t j) const {
-    if (ORD == RowMajor) {
+    // constexpr evaluates the if-statement at compile time
+    if constexpr (ORD == RowMajor) {
       return data_[i * dist_ + j];
     }
-    if (ORD == ColMajor) {
+    if constexpr(ORD == ColMajor) {
       return data_[j * dist_ + i];
+    }
+  }
+
+  // transposed view of matrix
+  auto transposed() const{
+    if constexpr (ORD == RowMajor){
+      return MatrixView<T, ColMajor> (width_, height_, data_);
+    }
+    else{
+      return MatrixView<T, RowMajor> (width_, height_, data_);
+    }
+  }
+
+  // returns row i as a VectorView
+  auto Row(size_t i){
+    if constexpr (ORD == RowMajor){
+      return VectorView<T, std::integral_constant<size_t,1> > (width_, data_ + i*dist_);
+    }
+    else{
+      return VectorView<T, size_t> (width_, dist_, (data_ + i));
+    }
+  }
+
+  // returns column j as VectorView
+  auto Col(size_t j){
+    if constexpr  (ORD == ColMajor){
+      return VectorView<T, std::integral_constant<size_t,1> > (height_, data_ + j*dist_);
+    }
+    else{
+      return VectorView<T, size_t> (height_, dist_, (data_ + j));
     }
   }
 
 };
 
 
-template <typename T, ORDERING ORD>
+template <typename T, ORDERING ORD = RowMajor>
 class Matrix : public MatrixView<T, ORD> {
   typedef MatrixView<T, ORD> BASE;
   using BASE::data_;
@@ -215,9 +251,9 @@ class Matrix : public MatrixView<T, ORD> {
 template <typename T, ORDERING ORD>
 std::ostream & operator<< (std::ostream & ost, const MatrixView<T, ORD> & A){
   if ((A.width() > 0) && (A.height() > 0)){
-    for (size_t j = 0; j < A.width(); j++){
+    for (size_t i = 0; i < A.height(); i++){
       ost << "(";
-      for (size_t i = 0; i < A.height(); i++){
+      for (size_t j = 0; j < A.width(); j++){
         // matrix elements are separated by tabs
         ost << A(i, j) << "\t";
       }
