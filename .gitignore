@@ -1,6 +1,7 @@
-# TO IGNORE THE ENTIRE ./build DIRECTORY
+# TO IGNORE THE ENTIRE ./build AND ./docs/_build DIRECTORIES
 
 build/
+docs/_build/
 
 
 # FROM CMAKE

@@ -3,31 +3,32 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to ASC-bla's documentation!
+Welcome to Neo-cla's documentation!
 ===================================
 
-ASC-bla is a C++ library for basic linear algebra operations.
-The library provides template classes **Vector** and **Matrix**.
+Neo-cla is a C++ library for basic linear algebra operations.
+It is a fork of `ASC-bla <https://github.com/TUWien-ASC/ASC-bla>`_. 
+The library provides the classes **Vector** and **Matrix**, with batteries included (Views, Expressions).
 
 Installation is via git-clone:
 
 ..  code-block::
     
-    git clone https://github.com/TUWien-ASC/ASC-bla.git
+    git clone https://github.com/kajamia/Neo-CLA.git
 
 
 To configure and build some tests do
 
 ..  code-block::
 
-    cd ASC-bla
+    cd Neo-CLA
     mkdir build
     cd build
     cmake ..
     make
     
 
-To use ASC-bla in your code, set the compiler include path properly, and include the header files
+To use Neo-CLA in your code, set the compiler include path properly, and include the header files
 
 ..  code-block::
 
