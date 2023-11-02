@@ -1,5 +1,7 @@
-# ASC-bla
+# Neo-CLA
+
 A simple basic linear algebra implementation using modern C++.
+It is named after the matrix character and CLA stands for (over-)**c**omplicated **l**inear **a**lgebra.
 
 [![RTD](https://readthedocs.org/projects/asc-bla/badge/?version=latest)](https://asc-bla.readthedocs.io/en/latest/?badge=latest)
 

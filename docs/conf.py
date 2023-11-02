@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'ASC-bla'
-copyright = '2023, J. Schoeberl'
-author = 'J. Schoeberl'
+project = 'Neo-CLA'
+copyright = '2023, Kaja M., Vivien R., Daniel L., Norbert H.'
+author = 'Kaja M., Vivien R., Daniel L., Norbert H.'
 
 
 # -- General configuration ---------------------------------------------------
