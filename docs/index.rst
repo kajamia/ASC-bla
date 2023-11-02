@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Neo-cla's documentation!
+Welcome to Neo-CLA's documentation!
 ===================================
 
 Neo-cla is a C++ library for basic linear algebra operations.
