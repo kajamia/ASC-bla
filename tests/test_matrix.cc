@@ -13,9 +13,9 @@ bla::Matrix<double, bla::RowMajor> returnsmatrix(size_t m, size_t n){
   return D;
 }
 
-int main()
-{
-try{
+// miscellaneous tests (storage, access, output, ...)
+void misc_tests(){
+
   size_t m = 6;
   size_t n = 5;
   bla::Matrix<double, bla::RowMajor> A(m, n);
@@ -46,19 +46,62 @@ try{
                                15, 16, 17, 18, 19, 20, 21,
                                22, 23, 24, 25, 26, 27, 28});
 
-  /* for (size_t i=0; i < E.height(); i++){
+  for (size_t i=0; i < E.height(); i++){
     std::cout << E.Row(i) << std::endl;
   }
 
   for (size_t j=0; j < E.width(); j++){
     std::cout << E.Col(j) << std::endl;
-  } */  
+  }  
 
-  // std::cout << E << std::endl << E.width() << E.height() << std::endl << E.transposed() << std::endl << "  󱁖" << std::endl;
+  std::cout << E << std::endl << E.width() << E.height() << std::endl << E.transposed() << std::endl << "  󱁖" << std::endl;
 
   std::cout << F.Rows(1, 2) << std::endl;
 
+}
 
+// tests for matrix expressions
+void expr_tests(){
+
+  bla::Matrix<double> A (3, 3, {0, 0, 1,
+                                0, 1, 0,
+                                1, 0, 0});
+
+  bla::Matrix<double> B (3, 3, {2, 0, 1,
+                                4, 1, 2,
+                                4, 2, 0});
+
+  /* std::cout << A*B << std::endl;
+  std::cout << A+B << std::endl;
+  std::cout << A+B*A << std::endl;
+ */
+
+}
+
+// tests for inverse calculation
+void inverse_tests(){
+  // https://studyflix.de/mathematik/inverse-matrix-berechnen-2432
+  bla::Matrix<double> A (3, 3, {2, 0, 1,
+                                4, 1, 2,
+                                4, 2, 0});
+  // std::cout << bla::Inverse(A) << std:endl << bla::inverse(A)*A << std::endl;
+
+  // https://studyflix.de/mathematik/inverse-2x2-2420
+  bla::Matrix<double> B (2, 2, {1, 2,
+                                2, 3});
+  
+  // std::cout << bla::Inverse(B) << std:endl << bla::inverse(B)*B << std::endl;
+
+}
+
+int main()
+{
+try{
+  
+
+  misc_tests();
+
+  return 0;
   // TODO test Matrix(const MatrixExpr<TB> & B)
   // TODO test output stream operator
 }
