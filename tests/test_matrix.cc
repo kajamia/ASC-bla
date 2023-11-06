@@ -63,14 +63,25 @@ void misc_tests(){
 // tests for matrix expressions
 void expr_tests(){
 
-  bla::Matrix<double> A (3, 3, {0, 0, 1,
+  bla::Matrix<double> A (4, 3, {0, 0, 1,
                                 0, 1, 0,
-                                1, 0, 0});
+                                1, 0, 0,
+                                2, 1, 3});
 
-  bla::Matrix<double> B (3, 3, {2, 0, 1,
-                                4, 1, 2,
-                                4, 2, 0});
+  bla::Matrix<double> B (3, 2, {2, 0,
+                                4, 1,
+                                4, 2});
 
+  bla::Vector<double> b (3);
+  b(0) = 1;
+  b(1) = 2;
+  b(2) = 3;
+
+std::cout << b << std::endl;
+
+
+std::cout << A+B << std::endl;
+std::cout << A*B << std::endl;
   /* std::cout << A*B << std::endl;
   std::cout << A+B << std::endl;
   std::cout << A+B*A << std::endl;
@@ -99,8 +110,8 @@ int main()
 try{
   
 
-  misc_tests();
-
+// misc_tests();
+expr_tests();
   return 0;
   // TODO test Matrix(const MatrixExpr<TB> & B)
   // TODO test output stream operator
