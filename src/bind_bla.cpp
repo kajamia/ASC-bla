@@ -2,6 +2,7 @@
 #include <pybind11/pybind11.h>
 
 #include "vector.h"
+#include "matrix.h"
 
 using namespace ASC_bla;
 namespace py = pybind11;
@@ -61,5 +62,44 @@ PYBIND11_MODULE(bla, m) {
           std::memcpy(&v(0), PYBIND11_BYTES_AS_STRING(mem.ptr()), v.Size()*sizeof(double));
           return v;
         }))
+    ;
+
+
+    // matrix class
+    py::class_<Matrix<double> > (m, "Matrix")
+      .def(py::init<size_t, size_t>(),
+        py::arg("height"), py::arg("width"), "create empty matrix")
+      .def("__getitem__",
+        [](Matrix<double>& self, std::tuple<int, int> ind) {
+          return self(std::get<0>(ind), std::get<1>(ind));
+      })
+      .def_property_readonly("shape",
+        [](const Matrix<double>& self) {
+          return std::tuple(self.height(), self.width());
+      })
+      .def("__setitem__", [](Matrix<double>& self, std::tuple<int, int> ind, double e){
+        size_t i = std::get<0>(ind);
+        size_t j = std::get<1>(ind);
+        if (i < 0){i += self.height();}
+        if (j < 0){j += self.width();}
+        if (i < 0 || j < 0 || i >= self.height() || j >= self.width()){ throw py::index_error("index out of range");}
+
+        self(i, j) = e;
+      })
+      .def("__add__", [](const Matrix<double>& self, const Matrix<double>& other){
+        return Matrix<double> (self + other);
+      })
+      .def("__mul__", [](const Matrix<double>& self, const Matrix<double>& other){
+        return Matrix<double> (self * other);
+      })
+      .def("__mul__", [](const Matrix<double>& self, const Vector<double>& other){
+        return Vector<double> (self * other);
+      })
+      .def("__str__", [](const Matrix<double> & self)
+      {
+        std::stringstream str;
+        str << self;
+        return str.str();
+      })
     ;
 }

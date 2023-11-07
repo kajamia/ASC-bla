@@ -1,7 +1,9 @@
-# TO IGNORE THE ENTIRE ./build AND ./docs/_build DIRECTORIES
+# THE FOLLOWING DIRECTOIRES ARE IGNORED
 
 build/
 docs/_build/
+_skbuild/
+ASCsoft.egg-info
 
 
 # FROM CMAKE
