@@ -69,7 +69,8 @@ class ProdMatVecExpr : public VecExpr<ProdMatVecExpr<TA,TB>>
   TA A_;
   TB b_;
 public:
-  ProdMatrixExpr (TA A, TB b) : A_(A), b_(b) { ; }
+  ProdMatVecExpr (TA A, TB b) : A_(A), b_(b) { ; }
+  
   auto operator() (size_t i) const {
     auto entry = 0;
     for (size_t k = 0; k < A_.width(); k++){
