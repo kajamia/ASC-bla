@@ -77,14 +77,15 @@ void expr_tests(){
   b(1) = 2;
   b(2) = 3;
 
+std::cout << "A+B:" << std::endl;
 std::cout << b << std::endl;
+
+std::cout << "A*B:" << std::endl;
+std::cout << A*B << std::endl;
+
+std::cout << "A*b:" << std::endl;
 std::cout << A*b << std::endl;
-
-  /* std::cout << A*B << std::endl;
-  std::cout << A+B << std::endl;
-  std::cout << A+B*A << std::endl;
- */
-
+// std::cout << A+B*A << std::endl;
 }
 
 // tests for inverse calculation
