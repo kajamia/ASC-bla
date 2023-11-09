@@ -50,8 +50,9 @@ namespace ASC_bla
     integer incy = y.Dist();
     int err = 
       daxpy_ (&n, &alpha, &x(0),  &incx, &y(0), &incy);
-    if (err != 0)
-      throw std::runtime_error(std::string("daxpy returned errcode "+std::to_string(err)));      
+   
+   // if (err != 0)
+   //   throw std::runtime_error(std::string("daxpy returned errcode "+std::to_string(err)));      
   }
   
   
