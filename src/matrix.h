@@ -79,6 +79,9 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   size_t height() const { return this->height_; };
   size_t width() const { return this->width_; };
 
+  // returns dist_
+  size_t Dist() const {return dist_;}
+
   // round bracket access operator
   T &operator()(size_t i, size_t j) {
     // constexpr evaluates the if-statement at compile time

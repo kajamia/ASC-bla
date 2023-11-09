@@ -5,6 +5,7 @@
 #include <string>
 
 #include "vector.h"
+#include "matrix.h"
 
 
 
@@ -65,7 +66,7 @@ namespace ASC_bla
   // doublereal *b, integer *ldb, doublereal *beta, doublereal *c__, 
   // integer *ldc);
 
-  /*  
+   
   // c = a*b
   template <ORDERING OA, ORDERING OB>
   void MultMatMatLapack (MatrixView<double, OA> a,
@@ -92,15 +93,20 @@ namespace ASC_bla
     if (err != 0)
       throw std::runtime_error(std::string("MultMatMat got error "+std::to_string(err)));
   }
-                       
+
+  // multiplication for row-major c         
   template <ORDERING OA, ORDERING OB>
   int MultMatMatLapack (MatrixView<double, OA> a,
                         MatrixView<double, OB> b,
                         MatrixView<double, RowMajor> c)
   {
-    MultMatMatLapack (Trans(b), Trans(a), Trans(c));
+    MultMatMatLapack (b.transposed(), a.transposed(), c.transposed());
   }
-  */
+
+  class T_Lapack { };
+  static constexpr T_Lapack Lapack;
+
+  // | operator overload
 
   
 
