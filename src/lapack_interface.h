@@ -96,7 +96,7 @@ namespace ASC_bla
 
   // multiplication for row-major c         
   template <ORDERING OA, ORDERING OB>
-  int MultMatMatLapack (MatrixView<double, OA> a,
+  void MultMatMatLapack (MatrixView<double, OA> a,
                         MatrixView<double, OB> b,
                         MatrixView<double, RowMajor> c)
   {
