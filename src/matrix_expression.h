@@ -72,7 +72,7 @@ public:
   ProdMatVecExpr (TA A, TB b) : A_(A), b_(b) { ; }
   
   auto operator() (size_t i) const {
-    auto entry = 0;
+    decltype(TA(0)*TB(0)) entry = 0;
     for (size_t k = 0; k < A_.width(); k++){
       entry += A_(i, k) * b_(k);
     }
@@ -86,11 +86,6 @@ auto operator* (const MatrixExpr<TA> & A, const VecExpr<TB> & b)
 {
   return ProdMatVecExpr(A.Upcast(), b.Upcast());
 }
-
-  // TODO SumMatrixExpr *DONE:))*
-  // TODO MatrixProductExpr *DONE:))*
-  // TODO MatrixVectorProductExpr 
-
 
 template <typename T>
 std::ostream & operator<< (std::ostream & ost, const MatrixExpr<T> & A){

@@ -5,3 +5,14 @@ This is a file to keep track of homeworks and progress.
 
 - [ ] get the C++ part done
 - [ ] documentation
+
+
+### Until 16.11.
+
+- [ ] Inverse
+- [ ] Python
+- [ ] LU
+- [ ] LU as Python
+- [ ] PyPI
+- [ ] Neo-HPC as submodule!
+- [ ] merge everything
