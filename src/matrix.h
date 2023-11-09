@@ -155,6 +155,17 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     }
   }
 
+  void swapcols(size_t i, size_t j){      //(*this) - Matrix (M)
+  // row-wise swap for efficiency
+    T tmp;
+    for (size_t k = 0; k < height_; k++) {
+      tmp = (*this)(k, i);
+      (*this)(k, i) = (*this)(k, j);
+      (*this)(k, j) = tmp;
+
+    }
+  }
+
 };
 
 
@@ -265,6 +276,81 @@ class Matrix : public MatrixView<T, ORD> {
   }
 
 };
+
+
+template <ORDERING ORD>
+MatrixView<double, ORD> Inverse (MatrixView<double, ORD> M) {
+	/*	
+		'augment'(Erweitern) the matrix (top) by the identity (=Einheitsmatrix) on the bottom
+		Turn the matrix on top into the identity by elementary column ops
+		The matrix on the bottom is the inverse (this was the identity matrix)
+			Elementary column ops (=Reienopperator): Swap 2 columns, multiply a column by a scalar & add 2 columns
+	*/
+
+  // pivot element algorithm with pivot element at (i, j)
+  auto pivot = [](MatrixView<double, ORD> C, size_t i, size_t j, size_t n){
+    C.Col(j) *= (1/C(i, j));
+
+    C.swapcols(i, j);
+
+    auto pivcol = C.Col(i);    
+
+    for (size_t k = 0; k < n; k++){
+      if (k != i){
+        auto col = C.Col(k);
+
+        double C_i_k = C(i, k);
+
+        col = col + (-C_i_k)*pivcol;
+      }
+    }
+  };
+    
+  //if the matrix isn't square: exit (error)
+  if(M.width() != M.height()){
+    throw M.width();
+  }
+
+  size_t n = M.height();
+
+  //create the identity matrix (I)
+  Matrix<double, ORD> I(n, n);
+
+  for (size_t i=0; i < n; i++){
+    for (size_t j=i; j < n; j++){
+      if (i == j){
+        I(i, j) = 1;
+      }
+      else{
+        I(i, j) = 0;
+      }
+    }
+  }
+
+  // create a 2nxn matrix (C) to work with
+  Matrix<double, ORD> C (2*n, n);
+
+  C.Rows(0, n) = I;
+  C.Rows(n, n) = M;
+
+  std::cout << C << std::endl;
+
+  // Perform elementary column operations
+  // i is the pivot row
+  for (size_t i=0; i < n; i++){
+    for (size_t j=0; j < n; j++){
+
+      if (C(n + i, j) != 0){
+        pivot(C, i, j, n);
+      }
+      else if (j == (n-1)) {
+        throw 0;
+      }
+    }
+  }
+
+  return C.Rows(0, n);
+}
 
 
 // output stream operator (without variadic templates)

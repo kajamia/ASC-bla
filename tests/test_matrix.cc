@@ -94,7 +94,8 @@ void inverse_tests(){
   bla::Matrix<double> A (3, 3, {2, 0, 1,
                                 4, 1, 2,
                                 4, 2, 0});
-  // std::cout << bla::Inverse(A) << std:endl << bla::inverse(A)*A << std::endl;
+  bla::Inverse(A);
+  std::cout << bla::Inverse(A) << std::endl << bla::Inverse(A)*A << std::endl;
 
   // https://studyflix.de/mathematik/inverse-2x2-2420
   bla::Matrix<double> B (2, 2, {1, 2,
@@ -109,8 +110,9 @@ int main()
 try{
   
 
-// misc_tests();
-expr_tests();
+  // misc_tests();
+  // expr_tests();
+  inverse_tests();
   return 0;
   // TODO test Matrix(const MatrixExpr<TB> & B)
   // TODO test output stream operator
