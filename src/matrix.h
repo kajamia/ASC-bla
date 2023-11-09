@@ -161,7 +161,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
 };
 
 
-template <typename T, ORDERING ORD = RowMajor>
+template <typename T = double, ORDERING ORD = RowMajor>
 class Matrix : public MatrixView<T, ORD> {
   typedef MatrixView<T, ORD> BASE;
   using BASE::data_;
@@ -227,6 +227,8 @@ class Matrix : public MatrixView<T, ORD> {
       dist_ = height;
     }
   }
+
+  T* Data(){return data_;}
 
   // destructor
   ~Matrix () { delete [] data_; }

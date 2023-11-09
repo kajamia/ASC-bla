@@ -76,9 +76,9 @@ namespace ASC_bla
     char transa_ = (OA == ColMajor) ? 'N' : 'T';
     char transb_ = (OB == ColMajor) ? 'N' : 'T'; 
   
-    integer n = c.Height();
-    integer m = c.Width();
-    integer k = a.Width();
+    integer n = c.height();
+    integer m = c.width();
+    integer k = a.width();
   
     double alpha = 1.0;
     double beta = 0;
