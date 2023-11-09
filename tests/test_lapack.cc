@@ -24,58 +24,45 @@ void testmatmul() {
 
 }
 
-void multexpr(){
- bla::Matrix<double> A (4, 3, {0, 0, 1,
-                                0, 1, 0,
-                                1, 0, 0,
-                                2, 1, 3});
+void multexpr(size_t n){
+  Matrix<double> A (n, n);
 
-  bla::Matrix<double> B (3, 2, {2, 0,
-                                4, 1,
-                                4, 2});
+  Matrix<double> B (n, n);
 
   Matrix C = A*B;
 
 }
-void multlapack(){
- bla::Matrix<double> A (4, 3, {0, 0, 1,
-                                0, 1, 0,
-                                1, 0, 0,
-                                2, 1, 3});
+void multlapack(size_t n){
+ Matrix<double> A (n, n);
 
-  bla::Matrix<double> B (3, 2, {2, 0,
-                                4, 1,
-                                4, 2});
+  Matrix<double> B (n, n);
 
-  Matrix C (4, 2);
+  Matrix C (n, n);
   MultMatMatLapack (A,B,C);
 }
 
-void timematmul(){
+void timematmul(size_t n){
   
   size_t flops = n*n*n;
   size_t runs = size_t (1e9 / flops) + 1;
 
   auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < runs; i++)
-    multlapack()
-  +auto end = std::chrono::high_resolution_clock::now();
+    multlapack(n);
+  auto end = std::chrono::high_resolution_clock::now();
   double time = std::chrono::duration<double>(end-start).count();
           
   cout << "lapack: " << "n = " << n << ", time = " << time << " s, GFlops = " 
-      << (n*runs)/time*1e-9 << endl;
+      << (flops*runs)/time*1e-9 << endl;
 
-  size_t flops = n*n*n;
-  size_t runs = size_t (1e9 / flops) + 1;
-
-  auto start = std::chrono::high_resolution_clock::now();
+  start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < runs; i++)
-    multexpr()
-  +auto end = std::chrono::high_resolution_clock::now();
-  double time = std::chrono::duration<double>(end-start).count();
+    multexpr(n);
+  end = std::chrono::high_resolution_clock::now();
+  time = std::chrono::duration<double>(end-start).count();
           
   cout << "expression: " << "n = " << n << ", time = " << time << " s, GFlops = " 
-      << (n*runs)/time*1e-9 << endl;
+      << (flops*runs)/time*1e-9 << endl;
 }
 
 int main()
@@ -95,7 +82,7 @@ int main()
   AddVectorLapack (2, x, y);  
   cout << "y+2*x = " << y << endl;
 
-  testmatmul();
+  timematmul(100);
 }
 
   
