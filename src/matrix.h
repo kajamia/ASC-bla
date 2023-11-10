@@ -7,6 +7,7 @@
 
 #include "vector.h"
 #include "matrix_expression.h"
+#include "expression.h"
 
 
 namespace ASC_bla {
@@ -39,13 +40,28 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   MatrixView(size_t height, size_t width, size_t dist, T *data)
     : height_(height), width_(width), dist_(dist), data_(data) {;};
   
-  // copy constructor, for good measure
+  // copy constructor
   MatrixView(const MatrixView<T, ORD> & A)
-    : height_(A.height_), width_(A.width_), dist_(A.dist_), data_(A.data_) {;}
-  
+    : height_(A.height()), width_(A.width()), dist_(A.dist_), data_(A.data_) {;}
+
   // assignment operator
   template <typename TB>
-  MatrixView &operator=(const MatrixExpr<TB> &M) {
+  MatrixView &operator=(const MatrixExpr<TB> & M) {
+    for (size_t i = 0; i < height_; i++) {
+      for (size_t j = 0; j < width_; j++) {
+        if constexpr (ORD == RowMajor) {
+          data_[dist_ * i + j] = M(i, j);
+        } else {
+          data_[dist_ * j + i] = M(i, j);
+        }
+      }
+    }
+    return *this;
+  }
+
+  // assignment operator
+  template <typename TB, ORDERING ORDB>
+  MatrixView &operator=(MatrixView<TB, ORDB> M) {
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
         if constexpr (ORD == RowMajor) {
@@ -79,6 +95,11 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   size_t height() const { return this->height_; };
   size_t width() const { return this->width_; };
 
+  T* Data(){return data_;}
+  
+  // returns dist_
+  size_t Dist() const {return dist_;}
+
   // round bracket access operator
   T &operator()(size_t i, size_t j) {
     // constexpr evaluates the if-statement at compile time
@@ -104,10 +125,10 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   // transposed view of matrix
   auto transposed() const{
     if constexpr (ORD == RowMajor){
-      return MatrixView<T, ColMajor> (width_, height_, data_);
+      return MatrixView<T, ColMajor> (width_, height_, dist_, data_);
     }
     else{
-      return MatrixView<T, RowMajor> (width_, height_, data_);
+      return MatrixView<T, RowMajor> (width_, height_, dist_, data_);
     }
   }
 
@@ -166,6 +187,18 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     }
   }
 
+  template <typename TB, ORDERING ORDB>
+  void deepcopy(const MatrixView<TB, ORDB> & M){
+    if (width_ != M.width()) throw width_;
+    if (height_ != M.height()) throw height_;
+
+    for (size_t i = 0; i < height_; i++) {
+      for (size_t j = 0; j < width_; j++) {
+        (*this)(i, j) = M(i, j);
+      }
+    }
+  }
+
 };
 
 
@@ -195,6 +228,7 @@ class Matrix : public MatrixView<T, ORD> {
     {
       std::swap(width_, A.width_);
       std::swap(height_, A.height_);
+      std::swap(dist_, A.dist_);
       std::swap(data_, A.data_);
     }
 
@@ -219,7 +253,6 @@ class Matrix : public MatrixView<T, ORD> {
     // check if list has the right size
     if (list.size() != height_*width_){
       throw list.size();
-      std::cout << "err";
       return;
     }else{
       // copy list
@@ -279,7 +312,7 @@ class Matrix : public MatrixView<T, ORD> {
 
 
 template <ORDERING ORD>
-MatrixView<double, ORD> Inverse (MatrixView<double, ORD> M) {
+MatrixView<double, ORD> Inverse (const MatrixView<double, ORD> & M) {
 	/*	
 		'augment'(Erweitern) the matrix (top) by the identity (=Einheitsmatrix) on the bottom
 		Turn the matrix on top into the identity by elementary column ops
@@ -289,20 +322,20 @@ MatrixView<double, ORD> Inverse (MatrixView<double, ORD> M) {
 
   // pivot element algorithm with pivot element at (i, j)
   auto pivot = [](MatrixView<double, ORD> C, size_t i, size_t j, size_t n){
-    C.Col(j) *= (1/C(i, j));
-
+    auto pivcol = C.Col(j); 
+    
     C.swapcols(i, j);
 
-    auto pivcol = C.Col(i);    
+    C.Col(i) = (1/C(n + i, i))*pivcol;  
 
     for (size_t k = 0; k < n; k++){
       if (k != i){
         auto col = C.Col(k);
 
-        double C_i_k = C(i, k);
+        double C_i_k = C(n + i, k);
 
         col = col + (-C_i_k)*pivcol;
-      }
+      } 
     }
   };
     
@@ -313,42 +346,36 @@ MatrixView<double, ORD> Inverse (MatrixView<double, ORD> M) {
 
   size_t n = M.height();
 
-  //create the identity matrix (I)
-  Matrix<double, ORD> I(n, n);
+  // create a 2nxn matrix (C) to work with
+  Matrix<double, ORD> C (2*n, n);
 
+  // create an identity matrix inside
   for (size_t i=0; i < n; i++){
     for (size_t j=i; j < n; j++){
       if (i == j){
-        I(i, j) = 1;
+        C(i, j) = 1;
       }
       else{
-        I(i, j) = 0;
+        C(i, j) = 0;
       }
     }
   }
 
-  // create a 2nxn matrix (C) to work with
-  Matrix<double, ORD> C (2*n, n);
-
-  C.Rows(0, n) = I;
-  C.Rows(n, n) = M;
-
-  std::cout << C << std::endl;
+  C.Rows(n, n).deepcopy(M);
 
   // Perform elementary column operations
   // i is the pivot row
   for (size_t i=0; i < n; i++){
-    for (size_t j=0; j < n; j++){
-
+    for (size_t j=i; j < n; j++){
       if (C(n + i, j) != 0){
         pivot(C, i, j, n);
+        break;
       }
       else if (j == (n-1)) {
         throw 0;
       }
     }
   }
-
   return C.Rows(0, n);
 }
 

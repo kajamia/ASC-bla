@@ -26,15 +26,15 @@ void misc_tests(){
 
   bla::Matrix<double> C = A;
 
-  std::cout << C << std::endl << C.width() << C.height() << std::endl;
+  // std::cout << C << std::endl << C.width() << C.height() << std::endl;
 
   B = C;
   
-  std::cout << B <<std::endl;
+  // std::cout << B <<std::endl;
 
   B = returnsmatrix(m, n);
 
-  std::cout << B <<std::endl;
+  // std::cout << B <<std::endl;
 
   bla::Matrix<double> E(4, 7, {1, 2, 3, 4, 5, 6, 7,
                                8, 9, 10, 11, 12, 13, 14,
@@ -46,7 +46,7 @@ void misc_tests(){
                                15, 16, 17, 18, 19, 20, 21,
                                22, 23, 24, 25, 26, 27, 28});
 
-  for (size_t i=0; i < E.height(); i++){
+/*   for (size_t i=0; i < E.height(); i++){
     std::cout << E.Row(i) << std::endl;
   }
 
@@ -56,7 +56,8 @@ void misc_tests(){
 
   std::cout << E << std::endl << E.width() << E.height() << std::endl << E.transposed() << std::endl << "  󱁖" << std::endl;
 
-  std::cout << F.Rows(1, 2) << std::endl;
+  std::cout << F.Rows(1, 2) << std::endl */;
+  std::cout << F << F.transposed();
 
 }
 
@@ -94,7 +95,6 @@ void inverse_tests(){
   bla::Matrix<double> A (3, 3, {2, 0, 1,
                                 4, 1, 2,
                                 4, 2, 0});
-  bla::Inverse(A);
   std::cout << bla::Inverse(A) << std::endl << bla::Inverse(A)*A << std::endl;
 
   // https://studyflix.de/mathematik/inverse-2x2-2420
