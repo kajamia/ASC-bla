@@ -184,6 +184,7 @@ class Matrix : public MatrixView<T, ORD> {
     {
       std::swap(width_, A.width_);
       std::swap(height_, A.height_);
+      std::swap(dist_, A.dist_);
       std::swap(data_, A.data_);
     }
 
