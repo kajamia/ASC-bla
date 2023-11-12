@@ -109,7 +109,7 @@ namespace ASC_bla
   // | operator overload
 
   
-
+/* 
   template <ORDERING ORD>
   class LapackLU {
     Matrix <double, ORD> a;
@@ -169,7 +169,7 @@ namespace ASC_bla
     // Matrix<double,ORD> UFactor() const { ... }
     // Matrix<double,ORD> PFactor() const { ... }
   };
-
+ */
   
 }
 
