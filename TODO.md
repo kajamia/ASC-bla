@@ -11,8 +11,8 @@ This is a file to keep track of homeworks and progress.
 
 - [ ] Inverse
 - [ ] Python
-- [ ] LU
+- [ ] (Vivien)LU
 - [ ] LU as Python
 - [ ] PyPI
-- [ ] Neo-HPC as submodule!
-- [ ] merge everything
+- [x] (Kaja) Neo-HPC as submodule!
+- [ ] merge everything :tada:
