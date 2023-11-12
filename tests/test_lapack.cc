@@ -83,6 +83,6 @@ int main()
   cout << "y+2*x = " << y << endl;
 
   timematmul(100);
-}
+};
 
   
