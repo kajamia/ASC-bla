@@ -95,6 +95,12 @@ PYBIND11_MODULE(bla, m) {
       .def("__mul__", [](const Matrix<double>& self, const Vector<double>& other){
         return Vector<double> (self * other);
       })
+      .def("__rmul__", [](Matrix<double> & self, double scal){ 
+        return Matrix<double> (scal * self); 
+      })
+      .def("__mul__", [](Matrix<double> & self, double scal){ 
+        return Matrix<double> (scal * self); 
+      })
       .def("__str__", [](const Matrix<double> & self)
       {
         std::stringstream str;
