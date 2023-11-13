@@ -187,7 +187,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     }
   }
 
-  template <typename TB, ORDERING ORDB>
+  /* template <typename TB, ORDERING ORDB>
   void deepcopy(const MatrixView<TB, ORDB> & M){
     if (width_ != M.width()) throw width_;
     if (height_ != M.height()) throw height_;
@@ -197,12 +197,12 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
         (*this)(i, j) = M(i, j);
       }
     }
-  }
+  } */
 
 };
 
 
-template <typename T, ORDERING ORD = RowMajor>
+template <typename T = double, ORDERING ORD = RowMajor>
 class Matrix : public MatrixView<T, ORD> {
   typedef MatrixView<T, ORD> BASE;
   using BASE::data_;
@@ -311,8 +311,8 @@ class Matrix : public MatrixView<T, ORD> {
 };
 
 
-template <ORDERING ORD>
-MatrixView<double, ORD> Inverse (const MatrixView<double, ORD> & M) {
+template <typename T, ORDERING ORD>
+Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
 	/*	
 		'augment'(Erweitern) the matrix (top) by the identity (=Einheitsmatrix) on the bottom
 		Turn the matrix on top into the identity by elementary column ops
@@ -321,20 +321,32 @@ MatrixView<double, ORD> Inverse (const MatrixView<double, ORD> & M) {
 	*/
 
   // pivot element algorithm with pivot element at (i, j)
-  auto pivot = [](MatrixView<double, ORD> C, size_t i, size_t j, size_t n){
-    auto pivcol = C.Col(j); 
-    
-    C.swapcols(i, j);
+  auto pivot = [](MatrixView<T, ORD> M, MatrixView<T, ORD> I, size_t i, size_t j, size_t n){
+    // copying out the pivot column(s)
+    auto pivcolM = M.Col(j); 
+    auto pivcolI = I.Col(j);
 
-    C.Col(i) = (1/C(n + i, i))*pivcol;  
+    // turning the pivot column into the i-th column
+    M.swapcols(i, j);
+    I.swapcols(i, j);
 
+    // storing the pivot element
+    T pivelem = M(i, i);
+
+    // generating the 1
+    M.Col(i) = (1/pivelem)*pivcolM;
+    I.Col(i) = (1/pivelem)*pivcolI;
+
+    // generating the zeros
     for (size_t k = 0; k < n; k++){
       if (k != i){
-        auto col = C.Col(k);
+        auto colM = M.Col(k);
+        auto colI = I.Col(k);
 
-        double C_i_k = C(n + i, k);
+        double M_i_k = M(i, k);
 
-        col = col + (-C_i_k)*pivcol;
+        colM = colM + (-M_i_k)*pivcolM;
+        colI = colI + (-M_i_k)*pivcolI;
       } 
     }
   };
@@ -346,29 +358,26 @@ MatrixView<double, ORD> Inverse (const MatrixView<double, ORD> & M) {
 
   size_t n = M.height();
 
-  // create a 2nxn matrix (C) to work with
-  Matrix<double, ORD> C (2*n, n);
+  // create a nxn identity matrix (I)
+  Matrix<T, ORD> I (n, n);
 
-  // create an identity matrix inside
   for (size_t i=0; i < n; i++){
     for (size_t j=i; j < n; j++){
       if (i == j){
-        C(i, j) = 1;
+        I(i, j) = 1;
       }
       else{
-        C(i, j) = 0;
+        I(i, j) = 0;
       }
     }
   }
-
-  C.Rows(n, n).deepcopy(M);
 
   // Perform elementary column operations
   // i is the pivot row
   for (size_t i=0; i < n; i++){
     for (size_t j=i; j < n; j++){
-      if (C(n + i, j) != 0){
-        pivot(C, i, j, n);
+      if (M(i, j) != 0){
+        pivot(M, I, i, j, n);
         break;
       }
       else if (j == (n-1)) {
@@ -376,7 +385,7 @@ MatrixView<double, ORD> Inverse (const MatrixView<double, ORD> & M) {
       }
     }
   }
-  return C.Rows(0, n);
+  return I;
 }
 
 

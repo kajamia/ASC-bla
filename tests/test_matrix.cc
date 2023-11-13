@@ -57,7 +57,15 @@ void misc_tests(){
   std::cout << E << std::endl << E.width() << E.height() << std::endl << E.transposed() << std::endl << "  󱁖" << std::endl;
 
   std::cout << F.Rows(1, 2) << std::endl */;
-  std::cout << F << F.transposed();
+  // std::cout << F << F.transposed();
+
+  bla::Matrix G (4, 7);
+  G = 42;
+
+  E.Rows(2, 3) = G.Rows(2, 3);
+  // E.Cols(2, 3) = G.Cols(2, 3);
+
+  std::cout << G << std::endl;
 
 }
 
@@ -101,7 +109,7 @@ void inverse_tests(){
   bla::Matrix<double> B (2, 2, {1, 2,
                                 2, 3});
   
-  // std::cout << bla::Inverse(B) << std:endl << bla::inverse(B)*B << std::endl;
+  std::cout << bla::Inverse(B) << std::endl << bla::Inverse(B)*B << std::endl;
 
 }
 
@@ -110,9 +118,9 @@ int main()
 try{
   
 
-  // misc_tests();
+  misc_tests();
   // expr_tests();
-  inverse_tests();
+  // inverse_tests();
   return 0;
   // TODO test Matrix(const MatrixExpr<TB> & B)
   // TODO test output stream operator
