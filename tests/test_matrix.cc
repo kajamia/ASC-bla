@@ -92,15 +92,21 @@ void expr_tests(){
   b(1) = 2;
   b(2) = 3;
 
-std::cout << "A+B:" << std::endl;
-std::cout << b << std::endl;
+  std::cout << "b: " << std::endl;
+  std::cout << b << std::endl;
 
-std::cout << "A*B:" << std::endl;
-std::cout << A*B << std::endl;
+  std::cout << "A*B:" << std::endl;
+  std::cout << A*B << std::endl;
 
-std::cout << "A*b:" << std::endl;
-std::cout << A*b << std::endl;
-// std::cout << A+B*A << std::endl;
+  std::cout << "A*b:" << std::endl;
+  std::cout << A*b << std::endl;
+
+  std::cout << "33*A:" << std::endl;
+  std::cout << 33*A << std::endl;
+
+  std::cout << "33*A + 2*A:" << std::endl;
+  std::cout << 33*A + 2*A << std::endl;
+  
 }
 
 // tests for inverse calculation
@@ -124,8 +130,8 @@ int main()
 try{
   
 
-  misc_tests();
-  // expr_tests();
+  // misc_tests();
+  expr_tests();
   // inverse_tests();
   return 0;
   // TODO test Matrix(const MatrixExpr<TB> & B)

@@ -28,7 +28,7 @@ public:
 
   auto operator() (size_t i, size_t j) const { return A_(i, j)+B_(i, j); }
   size_t height() const { return A_.height(); }
-  size_t width() const { return A_.width(); }     
+  size_t width() const { return A_.width(); }
 };
 
 template <typename TA, typename TB>
@@ -39,14 +39,14 @@ auto operator+ (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
 
 //Multiplikation
 template <typename TA, typename TB>
-class ProdMatrixExpr : public MatrixExpr<ProdMatrixExpr<TA,TB>>
+class ProdMatrixExpr : public MatrixExpr<ProdMatrixExpr<TA,TB> >
 {
   TA A_;
   TB B_;
 public:
   ProdMatrixExpr (TA A, TB B) : A_(A), B_(B) { }
   auto operator() (size_t i, size_t j) const {
-    auto entry = 0;
+    decltype(A_(0, 0)* B_(0, 0)) entry = 0;
     for (size_t k = 0; k < A_.width(); k++){
       entry += A_(i, k) * B_(k, j);
     }
@@ -72,7 +72,7 @@ public:
   ProdMatVecExpr (TA A, TB b) : A_(A), b_(b) { ; }
   
   auto operator() (size_t i) const {
-    auto entry = 0;
+    decltype(A_(0, 0)*b_(0)) entry = 0;
     for (size_t k = 0; k < A_.width(); k++){
       entry += A_(i, k) * b_(k);
     }
@@ -87,9 +87,28 @@ auto operator* (const MatrixExpr<TA> & A, const VecExpr<TB> & b)
   return ProdMatVecExpr(A.Upcast(), b.Upcast());
 }
 
-  // TODO SumMatrixExpr *DONE:))*
-  // TODO MatrixProductExpr *DONE:))*
-  // TODO MatrixVectorProductExpr 
+
+template <typename TSCAL, typename TMAT>
+class ProdScalMatExpr : public MatrixExpr<ProdScalMatExpr<TSCAL, TMAT> >
+{
+  TSCAL scal_;
+  TMAT A_;
+
+ public:
+  ProdScalMatExpr(TSCAL scal, TMAT A) : scal_(scal), A_(A) {;}
+
+  auto operator() (size_t i, size_t j) const {
+    return scal_ * A_(i, j);
+  }
+  size_t height() const { return A_.height(); }
+  size_t width() const { return A_.width(); }
+};
+
+template <typename TA>
+auto operator* (double scal, const MatrixExpr<TA> & A)
+{
+  return ProdScalMatExpr (scal, A.Upcast());
+}
 
 
 template <typename T>
