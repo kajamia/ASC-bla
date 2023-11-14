@@ -62,10 +62,16 @@ void misc_tests(){
   bla::Matrix G (4, 7);
   G = 42;
 
-  E.Rows(2, 3) = G.Rows(2, 3);
-  // E.Cols(2, 3) = G.Cols(2, 3);
+  bla::MatrixView H(E.Rows(2, 2));
+  bla::MatrixView I(G.Rows(2, 2));
 
-  std::cout << G << std::endl;
+  std::cout << H << std::endl << I << std::endl;
+
+  H = I;
+
+  std::cout << H.Data() << std::endl << I.Data() << std::endl;
+
+  std::cout << E << std::endl;
 
 }
 

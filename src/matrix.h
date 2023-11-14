@@ -40,13 +40,16 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   MatrixView(size_t height, size_t width, size_t dist, T *data)
     : height_(height), width_(width), dist_(dist), data_(data) {;};
   
-  // copy constructor
+  /* // copy constructor
   MatrixView(const MatrixView<T, ORD> & A)
-    : height_(A.height()), width_(A.width()), dist_(A.dist_), data_(A.data_) {;}
+    : height_(A.height()), width_(A.width()), dist_(A.dist_), data_(A.data_) {
+      std::cout << "copy ctor called" << std::endl;
+    } */
 
   // assignment operator
   template <typename TB>
   MatrixView &operator=(const MatrixExpr<TB> & M) {
+    std::cout << "operator= called" << std::endl;
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
         if constexpr (ORD == RowMajor) {
@@ -59,9 +62,10 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     return *this;
   }
 
-  // assignment operator
+  /* // assignment operator
   template <typename TB, ORDERING ORDB>
   MatrixView &operator=(MatrixView<TB, ORDB> M) {
+    std::cout << "deep operator= called" << std::endl;
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
         if constexpr (ORD == RowMajor) {
@@ -72,7 +76,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
       }
     }
     return *this;
-  }
+  } */
 
   // set all matrix components to scal
   MatrixView & operator= (T scal) {
