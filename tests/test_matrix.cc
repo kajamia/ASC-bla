@@ -59,11 +59,11 @@ void misc_tests(){
   std::cout << F.Rows(1, 2) << std::endl */;
   // std::cout << F << F.transposed();
 
-  bla::Matrix G (4, 7);
+  bla::Matrix<double, bla::RowMajor> G (4, 7);
   G = 42;
 
-  bla::MatrixView H(E.Rows(2, 2));
-  bla::MatrixView I(G.Rows(2, 2));
+  bla::MatrixView H(E.Cols(1, 2));
+  bla::MatrixView I(G.Cols(1, 2));
 
   std::cout << H << std::endl << I << std::endl;
 

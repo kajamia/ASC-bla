@@ -62,9 +62,8 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     return *this;
   }
 
-  /* // assignment operator
-  template <typename TB, ORDERING ORDB>
-  MatrixView &operator=(MatrixView<TB, ORDB> M) {
+  // assignment operator
+  MatrixView &operator=(const MatrixView<T, ORD> & M) {
     std::cout << "deep operator= called" << std::endl;
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
@@ -76,7 +75,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
       }
     }
     return *this;
-  } */
+  }
 
   // set all matrix components to scal
   MatrixView & operator= (T scal) {
