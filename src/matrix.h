@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <initializer_list>
-#include <stdexcept>
+#include <exception>
 
 #include "vector.h"
 #include "matrix_expression.h"
@@ -39,17 +39,14 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   // constructor with dist argument
   MatrixView(size_t height, size_t width, size_t dist, T *data)
     : height_(height), width_(width), dist_(dist), data_(data) {;};
-  
-  /* // copy constructor
-  MatrixView(const MatrixView<T, ORD> & A)
-    : height_(A.height()), width_(A.width()), dist_(A.dist_), data_(A.data_) {
-      std::cout << "copy ctor called" << std::endl;
-    } */
 
   // assignment operator
   template <typename TB>
   MatrixView &operator=(const MatrixExpr<TB> & M) {
-    std::cout << "operator= called" << std::endl;
+    if (height_ != M.height() || width_ != M.width()){
+      throw std::invalid_argument("setting matrixview to matrixexpr of different size not supported");
+    }
+
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
         if constexpr (ORD == RowMajor) {
@@ -64,7 +61,10 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
 
   // assignment operator
   MatrixView &operator=(const MatrixView<T, ORD> & M) {
-    std::cout << "deep operator= called" << std::endl;
+    if (height_ != M.height() || width_ != M.width()){
+      throw std::invalid_argument("setting matrixview to matrixview of different size not supported");
+    }
+
     for (size_t i = 0; i < height_; i++) {
       for (size_t j = 0; j < width_; j++) {
         if constexpr (ORD == RowMajor) {
@@ -190,18 +190,6 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     }
   }
 
-  /* template <typename TB, ORDERING ORDB>
-  void deepcopy(const MatrixView<TB, ORDB> & M){
-    if (width_ != M.width()) throw width_;
-    if (height_ != M.height()) throw height_;
-
-    for (size_t i = 0; i < height_; i++) {
-      for (size_t j = 0; j < width_; j++) {
-        (*this)(i, j) = M(i, j);
-      }
-    }
-  } */
-
 };
 
 
@@ -243,7 +231,7 @@ class Matrix : public MatrixView<T, ORD> {
     *this = B;
 
     // set dist_
-    if (ORD == RowMajor){
+    if constexpr (ORD == RowMajor){
       dist_ = width_;
     }else{
       dist_ = height_;
@@ -255,7 +243,7 @@ class Matrix : public MatrixView<T, ORD> {
     : MatrixView<T, ORD> (height, width, new T[list.size()]) {
     // check if list has the right size
     if (list.size() != height_*width_){
-      throw list.size();
+      throw std::invalid_argument("initializer list does not have right length for matrix shape");
       return;
     }else{
       // copy list
@@ -280,12 +268,8 @@ class Matrix : public MatrixView<T, ORD> {
   Matrix & operator=(const Matrix & A2)
   {
     // matrices need to have the same dimensions!
-    if (height_ != A2.height()){
-      throw A2.height();
-      return *this;
-    }else if (width_ != A2.width()){
-      throw A2.width();
-      return *this;
+    if (height_ != A2.height() || width_ != A2.width()){
+      throw std::invalid_argument("setting matrix to matrix of different size not supported");
     }
 
     // setting
@@ -297,7 +281,7 @@ class Matrix : public MatrixView<T, ORD> {
           data_[j*height_ + i] = A2(i, j);
         }
       }
-    } 
+    }
     return *this;
   }
 
@@ -356,7 +340,7 @@ Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
     
   //if the matrix isn't square: exit (error)
   if(M.width() != M.height()){
-    throw M.width();
+    throw std::invalid_argument("non-quadratic matrices cannot be inverted");
   }
 
   size_t n = M.height();
@@ -384,7 +368,7 @@ Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
         break;
       }
       else if (j == (n-1)) {
-        throw 0;
+        throw std::logic_error("matrix is not invertible");
       }
     }
   }

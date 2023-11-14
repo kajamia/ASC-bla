@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 
 #include "matrix.h"
 #include "matrix_expression.h"
@@ -59,7 +60,7 @@ void misc_tests(){
   std::cout << F.Rows(1, 2) << std::endl */;
   // std::cout << F << F.transposed();
 
-  bla::Matrix<double, bla::RowMajor> G (4, 7);
+  /* bla::Matrix<double, bla::RowMajor> G (4, 7);
   G = 42;
 
   bla::MatrixView H(E.Cols(1, 2));
@@ -71,7 +72,9 @@ void misc_tests(){
 
   std::cout << H.Data() << std::endl << I.Data() << std::endl;
 
-  std::cout << E << std::endl;
+  std::cout << E << std::endl; */
+
+  A+E;
 
 }
 
@@ -130,15 +133,15 @@ int main()
 try{
   
 
-  // misc_tests();
-  expr_tests();
+  misc_tests();
+  // expr_tests();
   // inverse_tests();
   return 0;
   // TODO test Matrix(const MatrixExpr<TB> & B)
   // TODO test output stream operator
 }
-catch (double err){
-  std::cout << "error caught: " << err << std::endl;
+catch (const std::exception & err){
+  std::cerr << "\033[31;1;4;5mERROR CAUGHT: " << err.what() << "\033[0m" << std::endl;
 }
 
 }

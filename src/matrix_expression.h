@@ -24,7 +24,11 @@ class SumMatrixExpr : public MatrixExpr<SumMatrixExpr<TA,TB>>
   TA A_;
   TB B_;
 public:
-  SumMatrixExpr (TA A, TB B) : A_(A), B_(B) { }
+  SumMatrixExpr (TA A, TB B) : A_(A), B_(B) {
+    if (A.width() != B.width() || A.height() != B.height()){
+      throw std::invalid_argument("matrix summands need to have the same shape");
+    }
+  }
 
   auto operator() (size_t i, size_t j) const { return A_(i, j)+B_(i, j); }
   size_t height() const { return A_.height(); }
@@ -44,7 +48,11 @@ class ProdMatrixExpr : public MatrixExpr<ProdMatrixExpr<TA,TB> >
   TA A_;
   TB B_;
 public:
-  ProdMatrixExpr (TA A, TB B) : A_(A), B_(B) { }
+  ProdMatrixExpr (TA A, TB B) : A_(A), B_(B) {
+    if (A.width() != B.height()){
+      throw std::invalid_argument("matrix shapes are not compatible for multiplication");
+    }
+  }
   auto operator() (size_t i, size_t j) const {
     decltype(A_(0, 0)* B_(0, 0)) entry = 0;
     for (size_t k = 0; k < A_.width(); k++){
@@ -69,7 +77,11 @@ class ProdMatVecExpr : public VecExpr<ProdMatVecExpr<TA,TB>>
   TA A_;
   TB b_;
 public:
-  ProdMatVecExpr (TA A, TB b) : A_(A), b_(b) { ; }
+  ProdMatVecExpr (TA A, TB b) : A_(A), b_(b) {
+    if (A.width() != b.Size()){
+      throw std::invalid_argument("matrix shape and vector length are not compatible for multiplication");
+    }
+  }
   
   auto operator() (size_t i) const {
     decltype(A_(0, 0)*b_(0)) entry = 0;
