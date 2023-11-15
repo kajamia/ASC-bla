@@ -125,7 +125,6 @@ namespace ASC_bla
     Matrix <double, ORD> a;
     std::vector<integer> ipiv;
 
-
   public:
     LapackLU (Matrix<double,ORD> _a, bool apply = true)
     : a(std::move(_a)), ipiv(a.SizeRows()) {
@@ -137,49 +136,11 @@ namespace ASC_bla
         integer lda = a.Dist();
         integer info;
     
-    
       //int dgetrf_(integer *m, integer *n, doublereal *a, 
       //             integer * lda, integer *ipiv, integer *info);
 
       dgetrf_(&n, &m, &a(0,0), &lda, &ipiv[0], &info);
     }
-    
-/*
-
-  // destructor
-    LapackLU() = default;
-
-  // Matrix getter
-    Matrix<double, ORD> GetMatrix() const { return a; }
-
-  // << operator
-    friend std::ostream& operator<<(std::ostream& os, const LapackLU<ORD>& lu) {
-      os << std::endl;
-      for (size_t i = 0; i < lu.a.SizeRows(); i++) {
-        for (size_t j = 0; j < lu.a.SizeCols(); j++) {
-          os << lu.a(i, j) << " ";
-        }
-        os << std::endl;
-      }
-      return os;
-    }
-
-    void Decompose(){
-        integer m = a.SizeRows();
-        if (m == 0) return;
-        integer n = a.SizeCols();
-        integer lda = a.Dist();
-        integer info;
-    
-    
-      //int dgetrf_(integer *m, integer *n, doublereal *a, 
-      //             integer * lda, integer *ipiv, integer *info);
-
-      dgetrf_(&n, &m, &a(0,0), &lda, &ipiv[0], &info);
-    }
-*/
-
-
 
 
     // b overwritten with A^{-1} b
@@ -213,16 +174,16 @@ namespace ASC_bla
     dgetri_(&n, &a(0,0), &lda, ipiv.data(), &hwork, &lwork, &info);
     lwork = integer(hwork);
     std::vector<double> work(lwork);
-    dgetri_(&n, &a(0,0), &lda, ipiv.data(), &lwork[0], &lwork, &info);
+    dgetri_(&n, &a(0,0), &lda, ipiv.data(), &work[0], &lwork, &info);
     return std::move(a);  
   
     }
 
-/*
+    /*
     Matrix<double,ORD> LFactor() const { ... }
     Matrix<double,ORD> UFactor() const { ... }
     Matrix<double,ORD> PFactor() const { ... }
-*/
+    */
 
     Matrix<double, ORD> LFactor() const {
       Matrix<double, ORD> L(a.SizeRows(), a.SizeCols());
@@ -256,7 +217,7 @@ namespace ASC_bla
       Matrix<double, ORD> P(a.SizeRows(), a.SizeCols());
       for (size_t i = 0; i < a.SizeRows(); i++) {
         for (size_t j = 0; j < a.SizeCols(); j++) {
-          if (i == tau[j])
+          if (i == ipiv[j])
             P(i, j) = 1;
           else
             P(i, j) = 0;
@@ -265,7 +226,18 @@ namespace ASC_bla
       return P;
 
     };
+  };
+
+  /*
+  //Other examples for useful matrix decompositions are QR-factorization
+  //From LU
+
+  template <ORDERING ORD>
+  class LapackQR {
+    Matrix <double, ORD> a;
+    std::vector<double> ipiv;
+
+
+  */
 };
-
-
 #endif

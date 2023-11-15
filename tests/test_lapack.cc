@@ -7,7 +7,7 @@
 
 using namespace ASC_bla;
 using namespace std;
-
+/*
 void testmatmul() {
   Matrix<double> A (4, 3, {0, 0, 1,
                             0, 1, 0,
@@ -23,7 +23,7 @@ void testmatmul() {
   std::cout << C << std::endl;
 
 }
-
+*/
 void multexpr(size_t n){
   Matrix<double> A (n, n);
 
@@ -83,6 +83,14 @@ int main()
   cout << "y+2*x = " << y << endl;
 
   timematmul(100);
-};
 
-  
+  return 0;
+}
+
+T* cout(){return cout_;}
+std::vector<double> ipiv = LapackLU();
+  cout << endl;
+  for (int i = 0; i < ipiv.size(); i++) {
+    cout << ipiv[i];
+    cout << ",";
+
