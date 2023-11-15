@@ -11,12 +11,14 @@ This is a file to keep track of homeworks and progress.
 
 - [x] Inverse
 - [x] Python
-- [ ] (Vivien)LU
-- [ ] LU as Python
+- [ ] (Vivien) LU
+- [ ] (Kaja, Vivien) LU as Python
+- [ ] more Lapack?
 - [ ] PyPI?
 - [x] (Kaja) Neo-HPC as submodule!
 - [ ] merge everything :tada:
 - [ ] continue documentation
 
 
-### Until 
+### Until 23.11.
+

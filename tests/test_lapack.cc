@@ -7,7 +7,7 @@
 
 using namespace ASC_bla;
 using namespace std;
-/*
+
 void testmatmul() {
   Matrix<double> A (4, 3, {0, 0, 1,
                             0, 1, 0,
@@ -23,7 +23,7 @@ void testmatmul() {
   std::cout << C << std::endl;
 
 }
-*/
+
 void multexpr(size_t n){
   Matrix<double> A (n, n);
 
@@ -65,7 +65,7 @@ void timematmul(size_t n){
       << (flops*runs)/time*1e-9 << endl;
 }
 
-int main()
+int generictests()
 {
   Vector<double> x(5);
   Vector<double> y(5);
@@ -82,15 +82,52 @@ int main()
   AddVectorLapack (2, x, y);  
   cout << "y+2*x = " << y << endl;
 
-  timematmul(100);
+  return 0;
+}
+
+int LUtests() {
+  
+  Matrix<double> A (3, 3, {2, 0, 1,
+                           4, 1, 2,
+                           4, 2, 0});
+  Vector<double> b (3);
+  b(0) = 1;
+  b(1) = 2;
+  b(2) = 3;
+
+  LapackLU lu(A);
+  lu.Solve(b);
+  std::cout << b << std::endl;
+
+  Matrix lfac = lu.LFactor();
+  Matrix ufac = lu.UFactor();
+  Matrix pfac = lu.PFactor();
+
+  std::cout << "L-factor: " << std::endl << lfac << std::endl;
+  std::cout << "U-factor: " << std::endl << ufac << std::endl;
+  std::cout << "P-factor: " << std::endl << pfac << std::endl;
+
+
+  // Matrix<double> inv(lu.Inverse());
+  // std::cout  << inv << std::endl;
+
+  return 0;                              
+}
+
+int main()
+{
+  // timematmul(100);
+  LUtests();
 
   return 0;
 }
 
-T* cout(){return cout_;}
-std::vector<double> ipiv = LapackLU();
-  cout << endl;
-  for (int i = 0; i < ipiv.size(); i++) {
-    cout << ipiv[i];
-    cout << ",";
 
+/*
+  T* cout(){return cout_;}
+  std::vector<double> ipiv = LapackLU();
+    cout << endl;
+    fo r (int i = 0; i < ipiv.size(); i++) {
+      cout << ipiv[i];
+      cout << ",";
+*/

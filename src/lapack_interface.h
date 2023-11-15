@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <exception>
 
 #include "vector.h"
 #include "matrix.h"
@@ -117,66 +118,73 @@ namespace ASC_bla
 
 
 
-  //a.Height() - a.SizeRows()
-  //a.Width() - a.SizeCols()
-
-  template <ORDERING ORD>
+  template <ORDERING ORD = RowMajor>
   class LapackLU {
     Matrix <double, ORD> a;
     std::vector<integer> ipiv;
 
   public:
-    LapackLU (Matrix<double,ORD> _a, bool apply = true)
-    : a(std::move(_a)), ipiv(a.SizeRows()) {
-    //constructor, if flag apply true then decompose, if False decompose only when needed
-      if (apply){}
-        integer m = a.SizeRows();
-        if (m == 0) return;
-        integer n = a.SizeCols();
-        integer lda = a.Dist();
-        integer info;
+    LapackLU (Matrix<double,ORD> _a)
+    : a(std::move(_a)), ipiv(a.height()) {
+      // does this work?
+      integer m = a.height();
+      integer n = a.width();
+      if (m == 0 || n == 0) throw std::invalid_argument("for LU, you need a matrix!");
+      integer lda = a.Dist();
+      integer info;
     
+      // https://netlib.org/lapack/explore-html/df/dc5/group__variants_g_ecomputational_ga0019443faea08275ca60a734d0593e60.html
       //int dgetrf_(integer *m, integer *n, doublereal *a, 
       //             integer * lda, integer *ipiv, integer *info);
 
-      dgetrf_(&n, &m, &a(0,0), &lda, &ipiv[0], &info);
+      dgetrf_(&n, &m, a.Data(), &lda, &ipiv[0], &info);
+
+      if (info != 0) throw std::invalid_argument("LapackLU() dgetrf failed");
     }
 
 
     // b overwritten with A^{-1} b
-    void Solve (VectorView<double> b) const {
+    void Solve (VectorView<double> b){
       char transa =  (ORD == ColMajor) ? 'N' : 'T';
-      integer n = a.SizeRows();
+      integer n = a.height();
+      if (a.height() != a.width()) throw std::runtime_error("LapackLU.Solve needs the matrix to be quadratic");
       integer nrhs = 1;
       integer lda = a.Dist();
       integer ldb = b.Size();
       integer info;
 
+      // https://netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga58e332cb1b8ab770270843221a48296d.html#ga58e332cb1b8ab770270843221a48296d
       // int dgetrs_(char *trans, integer *n, integer *nrhs, 
       //             doublereal *a, integer *lda, integer *ipiv,
       //             doublereal *b, integer *ldb, integer *info);
 
-      dgetrs_(&transa, &n, &nrhs, a.Data(), &lda, (integer*)ipiv.data(), b.Data(), &ldb, &info);
+      dgetrs_(&transa, &n, &nrhs, a.Data(), &lda, (integer*)&ipiv[0], b.Data(), &ldb, &info);
+
+      if (info != 0) throw std::runtime_error("LapackLU.Solve() dgetrs failed");
     }
   
 
     Matrix<double,ORD> Inverse() && {
-    double hwork;
-    integer lwork = -1;
-    integer n = a.SizeRows();      
-    integer lda = a.Dist();
-    integer info;
-    /*
-    int dgetri_(integer *n, doublereal *a, integer *lda, 
-                integer *ipiv, doublereal *work, integer *lwork, 
-                integer *info);
-    */       
-    dgetri_(&n, &a(0,0), &lda, ipiv.data(), &hwork, &lwork, &info);
-    lwork = integer(hwork);
-    std::vector<double> work(lwork);
-    dgetri_(&n, &a(0,0), &lda, ipiv.data(), &work[0], &lwork, &info);
-    return std::move(a);  
-  
+      double hwork;
+      integer lwork = -1;
+      integer n = a.height();
+      if (a.height() != a.width()) throw std::runtime_error("LapackLU.Inverse() needs the matrix to be quadratic");
+      integer lda = a.Dist();
+      integer info;
+      /*
+      https://netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html#ga56d9c860ce4ce42ded7f914fdb0683ff
+      int dgetri_(integer *n, doublereal *a, integer *lda, 
+                  integer *ipiv, doublereal *work, integer *lwork, 
+                  integer *info);
+      */       
+      dgetri_(&n, a.Data(), &lda, &ipiv[0], &hwork, &lwork, &info);
+      if (info != 0) throw std::runtime_error("LapackLU.Inverse() first dgetri failed");
+      lwork = integer(hwork);
+      std::vector<double> work(lwork);
+      dgetri_(&n, a.Data(), &lda, &ipiv[0], &work[0], &lwork, &info);
+      if (info != 0) throw std::runtime_error("LapackLU.Inverse() second dgetri failed");
+
+      return std::move(a);
     }
 
     /*
@@ -184,11 +192,12 @@ namespace ASC_bla
     Matrix<double,ORD> UFactor() const { ... }
     Matrix<double,ORD> PFactor() const { ... }
     */
-
+    
+    // copies lower triangular matrix
     Matrix<double, ORD> LFactor() const {
-      Matrix<double, ORD> L(a.SizeRows(), a.SizeCols());
-      for (size_t i = 0; i < a.SizeRows(); i++) {
-        for (size_t j = 0; j < a.SizeCols(); j++) {
+      Matrix<double, ORD> L(a.height(), a.width());
+      for (size_t i = 0; i < a.height(); i++) {
+        for (size_t j = 0; j < a.width(); j++) {
           if (i > j)
             L(i, j) = a(i, j);
           else if (i == j)
@@ -201,9 +210,9 @@ namespace ASC_bla
     };
 
     Matrix<double, ORD> UFactor() const {
-      Matrix<double, ORD> U(a.SizeRows(), a.SizeCols());
-      for (size_t i = 0; i < a.SizeRows(); i++) {
-        for (size_t j = 0; j < a.SizeCols(); j++) {
+      Matrix<double, ORD> U(a.height(), a.width());
+      for (size_t i = 0; i < a.height(); i++) {
+        for (size_t j = 0; j < a.width(); j++) {
           if (i <= j)
             U(i, j) = a(i, j);
           else
@@ -214,9 +223,10 @@ namespace ASC_bla
     };
 
     Matrix<double, ORD> PFactor() const {
-      Matrix<double, ORD> P(a.SizeRows(), a.SizeCols());
-      for (size_t i = 0; i < a.SizeRows(); i++) {
-        for (size_t j = 0; j < a.SizeCols(); j++) {
+      Matrix<double, ORD> P(a.height(), a.width());
+
+      for (size_t i = 0; i < ipiv.size(); i++) {
+        for (size_t j = 0; j < a.width(); j++) {
           if (i == ipiv[j])
             P(i, j) = 1;
           else
