@@ -87,17 +87,22 @@ int generictests()
 
 int LUtests() {
   
-  Matrix<double> A (3, 3, {2, 0, 1,
-                           4, 1, 2,
-                           4, 2, 0});
-  Vector<double> b (3);
+  // vorgerechnet in:
+  // https://www.das-gelbe-rechenbuch.de/download/Lu.pdf
+  Matrix<double> A (4, 4, {6, 5, 3, -10,
+                           3, 7, -3, 5,
+                           12, 4, 4, 4,
+                           0, 12, 0, -8});
+  Vector<double> b (4);
   b(0) = 1;
   b(1) = 2;
   b(2) = 3;
+  b(3) = 4;
+  Matrix<double> old_A(A);
 
   LapackLU lu(A);
   lu.Solve(b);
-  std::cout << b << std::endl;
+  std::cout << b << std::endl << old_A*b << std::endl;
 
   Matrix lfac = lu.LFactor();
   Matrix ufac = lu.UFactor();
@@ -107,9 +112,11 @@ int LUtests() {
   std::cout << "U-factor: " << std::endl << ufac << std::endl;
   std::cout << "P-factor: " << std::endl << pfac << std::endl;
 
+  std::cout << pfac*lfac*ufac << std::endl;
 
-  // Matrix<double> inv(lu.Inverse());
-  // std::cout  << inv << std::endl;
+
+  Matrix<double> inv(lu.Inverse());
+  std::cout  << inv << std::endl;
 
   return 0;                              
 }

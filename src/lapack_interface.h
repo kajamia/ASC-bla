@@ -164,7 +164,7 @@ namespace ASC_bla
     }
   
 
-    Matrix<double,ORD> Inverse() && {
+    Matrix<double,ORD> && Inverse() {//&& {
       double hwork;
       integer lwork = -1;
       integer n = a.height();
