@@ -1,4 +1,5 @@
 #include <sstream>
+#include <chrono>
 #include <pybind11/pybind11.h>
 
 #include "vector.h"
@@ -13,7 +14,7 @@ namespace py = pybind11;
 PYBIND11_MODULE(bla, m) {
     m.doc() = "Basic linear algebra module"; // optional module docstring
     
-    py::class_<Vector<double>> (m, "Vector")
+    py::class_<Vector<double>> (m, "Vector", py::buffer_protocol())
       .def(py::init<size_t>(),
            py::arg("size"), "create vector of given size")
       .def("__len__", &Vector<double>::Size,
@@ -47,7 +48,17 @@ PYBIND11_MODULE(bla, m) {
         return str.str();
       })
 
-     .def(py::pickle(
+      .def_buffer([](Vector<double> & self) -> py::buffer_info {
+        return py::buffer_info(
+          self.Data(),
+          sizeof(double),
+          py::format_descriptor<double>::format(),
+          1,
+          {self.Size()},
+          {sizeof(double) * self.Dist()}
+        );})
+
+      .def(py::pickle(
         [](Vector<double> & self) { // __getstate__
             /* return a tuple that fully encodes the state of the object */
           return py::make_tuple(self.Size(),
@@ -66,7 +77,7 @@ PYBIND11_MODULE(bla, m) {
 
 
     // matrix class
-    py::class_<Matrix<double> > (m, "Matrix")
+    py::class_<Matrix<double> > (m, "Matrix", py::buffer_protocol())
       .def(py::init<size_t, size_t>(),
         py::arg("height"), py::arg("width"), "create empty matrix")
       .def("__getitem__",
@@ -107,5 +118,42 @@ PYBIND11_MODULE(bla, m) {
         str << self;
         return str.str();
       })
+      .def("timed_mult", [](const Matrix<double> & self, const Matrix<double> & other){
+        auto start = std::chrono::high_resolution_clock::now();
+        self*other;
+        auto stop = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed_seconds{stop - start};
+        std::cout << "C++ multiplication took " << elapsed_seconds.count() << " seconds" << std::endl;
+      })
+      .def("Data", [](Matrix<double> & self){
+        return self.Data();
+      })
+      .def_buffer([](Matrix<double> & self) -> py::buffer_info {
+        return py::buffer_info(
+          self.Data(),
+          sizeof(double),
+          py::format_descriptor<double>::format(),
+          2,
+          {self.height(), self.width()},
+          {sizeof(double) * self.Dist(),
+          sizeof(double)}
+        );
+      })
+      .def(py::pickle(
+        [](Matrix<double> & self){
+          return py::make_tuple(self.height(), self.width(),
+                                py::bytes((char*)(void*)self.Data(), self.height()*self.width()*sizeof(double)));
+        },
+        [](py::tuple t){
+          if (t.size() != 3)
+            throw std::runtime_error("invalid pickled obj: should be a 3-tuple!");
+          
+          Matrix<double> A(t[0].cast<size_t>(), t[1].cast<size_t>());
+          py::bytes data = t[2].cast<py::bytes>();
+          std::memcpy(A.Data(), PYBIND11_BYTES_AS_STRING(data.ptr()), A.height()*A.width()*sizeof(double));
+          return A;
+        }
+      ))
     ;
+
 }

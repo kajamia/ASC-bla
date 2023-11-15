@@ -101,7 +101,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   T* Data(){return data_;}
   
   // returns dist_
-  size_t Dist() const {return dist_;}
+  size_t & Dist() {return dist_;}
 
   // round bracket access operator
   T &operator()(size_t i, size_t j) {
