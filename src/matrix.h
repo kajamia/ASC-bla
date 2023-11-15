@@ -40,6 +40,12 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   MatrixView(size_t height, size_t width, size_t dist, T *data)
     : height_(height), width_(width), dist_(dist), data_(data) {;};
 
+  
+  /* // copy constructor, for good measure
+  MatrixView(const MatrixView<T, ORD> & A)
+    : height_(A.height_), width_(A.width_), dist_(A.dist_), data_(A.data_) {;} */
+  
+
   // assignment operator
   template <typename TB>
   MatrixView &operator=(const MatrixExpr<TB> & M) {
@@ -259,6 +265,8 @@ class Matrix : public MatrixView<T, ORD> {
       dist_ = height;
     }
   }
+
+
 
   // destructor
   ~Matrix () { delete [] data_; }

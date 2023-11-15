@@ -1,0 +1,3 @@
+[submodule "external_dependencies/HPC"]
+	path = external_dependencies/HPC
+	url = https://github.com/kajamia/Neo-CLA-HPC.git

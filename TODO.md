@@ -3,5 +3,22 @@ This is a file to keep track of homeworks and progress.
 
 ### Until 9.11.
 
-- [ ] get the C++ part done
-- [ ] documentation
+- [x] get the C++ part done
+- [x] documentation
+
+
+### Until 16.11.
+
+- [x] Inverse
+- [x] Python
+- [ ] (Vivien) LU
+- [ ] (Kaja, Vivien) LU as Python
+- [ ] more Lapack?
+- [ ] PyPI?
+- [x] (Kaja) Neo-HPC as submodule!
+- [ ] merge everything :tada:
+- [ ] continue documentation
+
+
+### Until 23.11.
+
