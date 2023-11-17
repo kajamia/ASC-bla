@@ -118,15 +118,15 @@ namespace ASC_bla
 
 
 
-  template <ORDERING ORD = RowMajor>
   class LapackLU {
-    Matrix <double, ORD> a;
+    Matrix <double, ColMajor> a;
     std::vector<integer> ipiv;
 
   public:
-    LapackLU (Matrix<double,ORD> _a)
+    LapackLU (Matrix<double,ColMajor> _a)
     : a(std::move(_a)), ipiv(a.height()) {
-      // does this work?
+      // ColMajor is NECESSARY for it to work with dgetrf
+      // with typecasting, however, makes it possible to pass any double matrix
       integer m = a.height();
       integer n = a.width();
       if (m == 0 || n == 0) throw std::invalid_argument("for LU, you need a matrix!");
@@ -137,7 +137,7 @@ namespace ASC_bla
       //int dgetrf_(integer *m, integer *n, doublereal *a, 
       //             integer * lda, integer *ipiv, integer *info);
 
-      dgetrf_(&n, &m, a.Data(), &lda, &ipiv[0], &info);
+      dgetrf_(&m, &n, a.Data(), &lda, &ipiv[0], &info);
 
       if (info != 0) throw std::invalid_argument("LapackLU() dgetrf failed");
     }
@@ -145,7 +145,7 @@ namespace ASC_bla
 
     // b overwritten with A^{-1} b
     void Solve (VectorView<double> b){
-      char transa =  (ORD == ColMajor) ? 'N' : 'T';
+      char transa =  'N';
       integer n = a.height();
       if (a.height() != a.width()) throw std::runtime_error("LapackLU.Solve needs the matrix to be quadratic");
       integer nrhs = 1;
@@ -164,7 +164,7 @@ namespace ASC_bla
     }
   
 
-    Matrix<double,ORD> && Inverse() {//&& {
+    Matrix<double,ColMajor> Inverse() {
       double hwork;
       integer lwork = -1;
       integer n = a.height();
@@ -194,8 +194,8 @@ namespace ASC_bla
     */
     
     // copies lower triangular matrix
-    Matrix<double, ORD> LFactor() const {
-      Matrix<double, ORD> L(a.height(), a.width());
+    Matrix<double, ColMajor> LFactor() const {
+      Matrix<double, ColMajor> L(a.height(), a.width());
       for (size_t i = 0; i < a.height(); i++) {
         for (size_t j = 0; j < a.width(); j++) {
           if (i > j)
@@ -209,8 +209,8 @@ namespace ASC_bla
       return L;
     };
 
-    Matrix<double, ORD> UFactor() const {
-      Matrix<double, ORD> U(a.height(), a.width());
+    Matrix<double, ColMajor> UFactor() const {
+      Matrix<double, ColMajor> U(a.height(), a.width());
       for (size_t i = 0; i < a.height(); i++) {
         for (size_t j = 0; j < a.width(); j++) {
           if (i <= j)
@@ -222,8 +222,8 @@ namespace ASC_bla
       return U;
     };
 
-    Matrix<double, ORD> PFactor() const {
-      Matrix<double, ORD> P(a.height(), a.width());
+    Matrix<double, ColMajor> PFactor() const {
+      Matrix<double, ColMajor> P(a.height(), a.width());
 
       for (size_t i = 0; i < ipiv.size(); i++) {
         for (size_t j = 0; j < a.width(); j++) {

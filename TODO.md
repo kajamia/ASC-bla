@@ -25,3 +25,6 @@ This is a file to keep track of homeworks and progress.
 
 ### Until 23.11.
 
+- [ ] test added arithmetic operations
+- [ ] fast matrix multiplication :rocket:
+- [ ] continue documentation
