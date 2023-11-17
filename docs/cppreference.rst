@@ -15,7 +15,7 @@ This is the main entry point to Neo-CLA.
 
 .. cpp:class:: Matrix
 
-    .. cpp:classmethod:: Matrix (size_t height, size_t width, std::initializer_list<T> list)
+    .. cpp:function:: Matrix (size_t height, size_t width, std::initializer_list<T> list)
     
     The initializer list constructor stores an initalizer list into a matrix.
 
