@@ -16,7 +16,11 @@ This is a file to keep track of homeworks and progress.
 - [ ] more Lapack?
 - [ ] PyPI?
 - [x] (Kaja) Neo-HPC as submodule!
-- [ ] merge everything :tada:
+- [x] merge everything :tada:
+- [ ] continue documentation
+- [ ] dividieren für simd 
+- [ ] SIMD<double,2> class machen
+- [ ] (Kaja) <= operator in simd_avx.h
 
 
 ### Until 23.11.
