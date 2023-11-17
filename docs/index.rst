@@ -3,51 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Neo-CLA's documentation!
-===================================
+Hey! Welcome to Neo-CLA's documentation!
+========================================
 
-Neo-cla is a C++ library for basic linear algebra operations.
-It is a fork of `ASC-bla <https://github.com/TUWien-ASC/ASC-bla>`_. 
-The library provides the classes **Vector** and **Matrix**, with batteries included (Views, Expressions).
+Neo-cla is a C++ library for basic linear algebra (bla) operations.
+It is a fork of `ASC-bla <https://github.com/TUWien-ASC/ASC-bla>`_.
+Thus, it provides its contents within the **ASC_bla** namespace.
 
-Installation is via git-clone:
+Neo-CLA gives you:
+ - Matrix and vector operations (fast C++)
+ - A Python interface for simple yet performant code
+ - An interface to Lapack for more performance
+ - The custom high-performance submodule `Neo-CLA-HPC <https://github.com/kajamia/Neo-CLA-HPC>`_
 
-..  code-block::
-    
-    git clone https://github.com/kajamia/Neo-CLA.git
-
-
-To configure and build some tests do
-
-..  code-block::
-
-    cd Neo-CLA
-    mkdir build
-    cd build
-    cmake ..
-    make
-    
-
-To use Neo-CLA in your code, set the compiler include path properly, and include the header files
-
-..  code-block::
-
-    #include <vector.h>
-    #include <matrix.h>
-
-All objects are implemented in the namespace ASC_bla. To use them with less typing, you can set
-
-..  code-block::
-    
-    namespace bla = ASC_bla;
-
-or even
-
-..  code-block::
-    
-    using namespace ASC_bla;
-
-    
 
 You can create vectors and compute with vectors like:
 
@@ -80,13 +48,15 @@ You can extract a rows or a columns from a matrix:
    Vector col1 = product.Col(1);
 
 
-some changes ...  
 
    
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
    
+   Homepage <self>
+   installation
+   pyreference
    cppreference
 
 
