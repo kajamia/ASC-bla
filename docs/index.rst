@@ -30,7 +30,7 @@ You can create vectors and compute with vectors like:
 
 
 For matrices you can choose between row-major (`RowMajor`) or column-major (`ColMajor`) storage,
-default is row-major.
+default is row-major, with all entries of type double.
 
 ..  code-block:: cpp
 
@@ -57,7 +57,7 @@ You can extract a rows or a columns from a matrix:
    Homepage <self>
    installation
    pyreference
-   cppreference
+   cppreference/index
 
 
 Indices and tables

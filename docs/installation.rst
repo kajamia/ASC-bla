@@ -5,6 +5,7 @@ Getting started
 Requirements
 ------------
 
+
  - C++ compilers
  - CMake
  - Lapack
@@ -13,30 +14,30 @@ Requirements
 
 (and of course, it all needs to work well together)
 
+..
+    Python Installation
+    -------------------
 
-Python Installation
--------------------
+    To install, use:
 
-To install, use:
+    .. code-block::
 
-.. code-block::
-
-    pip install git+https://github.com/kajamia/Neo-CLA.git@main
+        pip install git+https://github.com/kajamia/Neo-CLA.git@main
 
 
-C++ Installation
-----------------
+Installation
+------------
 
 Installation is via git-clone:
 
-..  code-block::
+..  code-block:: bash
     
     git clone https://github.com/kajamia/Neo-CLA.git
 
 
 To configure and build some tests do
 
-..  code-block::
+..  code-block:: bash
 
     cd Neo-CLA
     mkdir build
@@ -44,11 +45,26 @@ To configure and build some tests do
     cmake ..
     make
 
-Afterwards, you can still compile for Python using pip install . inside of Neo-CLA.
+To compile for python:
+
+.. code-block:: bash
+
+    cd Neo-CLA
+    pip install .
 
 
-Usage
------
+Usage: Python
+-------------
+
+ASCsoft.bla exposes the the classes Vector and Matrix:
+
+.. code-block:: python
+
+    from ASCsoft.bla import Matrix, Vector
+    
+
+Usage: C++
+----------
 
 To use Neo-CLA in your code, set the compiler include path properly, and include the header files
 
@@ -68,6 +84,4 @@ or even
 ..  code-block:: cpp
     
     using namespace ASC_bla;
-
-
 
