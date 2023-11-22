@@ -58,6 +58,7 @@ You can extract a rows or a columns from a matrix:
    installation
    pyreference
    cppreference/index
+   neohpc/index
 
 
 Indices and tables

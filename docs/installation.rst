@@ -6,11 +6,11 @@ Requirements
 ------------
 
 
- - C++ compilers
- - CMake
- - Lapack
- - Python
- - pybind11
+- C++ compilers
+- CMake
+- Lapack
+- Python
+- pybind11
 
 (and of course, it all needs to work well together)
 
@@ -32,7 +32,7 @@ Installation is via git-clone:
 
 ..  code-block:: bash
     
-    git clone https://github.com/kajamia/Neo-CLA.git
+    git clone --recurse-submodules https://github.com/kajamia/Neo-CLA.git
 
 
 To configure and build some tests do

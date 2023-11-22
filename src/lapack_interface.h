@@ -122,11 +122,11 @@ namespace ASC_bla
     Matrix <double, ColMajor> a;
     std::vector<integer> ipiv;
 
-  public:
+   public:
     LapackLU (Matrix<double,ColMajor> _a)
     : a(std::move(_a)), ipiv(a.height()) {
-      // ColMajor is NECESSARY for it to work with dgetrf
-      // with typecasting, however, makes it possible to pass any double matrix
+      // ColMajor is the least complicated way to work with dgetrf
+      // however, typecasting makes it possible to pass any double matrix
       integer m = a.height();
       integer n = a.width();
       if (m == 0 || n == 0) throw std::invalid_argument("for LU, you need a matrix!");
@@ -207,7 +207,7 @@ namespace ASC_bla
         }
       }
       return L;
-    };
+    }
 
     Matrix<double, ColMajor> UFactor() const {
       Matrix<double, ColMajor> U(a.height(), a.width());
@@ -220,14 +220,36 @@ namespace ASC_bla
         }
       }
       return U;
-    };
+    }
 
     Matrix<double, ColMajor> PFactor() const {
       Matrix<double, ColMajor> P(a.height(), a.width());
 
-      for (size_t i = 0; i < ipiv.size(); i++) {
+      /* From the internet: The ipiv array is an array that lists row interchanges,
+      it is not a true pivot vector.
+      More on that:
+        https://stackoverflow.com/questions/45122804/is-there-an-algorithm-that-changes-lapack-permutation-to-a-real-permutation
+        https://community.intel.com/t5/Intel-oneAPI-Math-Kernel-Library/Strange-partial-pivoting-of-LAPACKE-dgetrf/m-p/1143469
+      
+      permut is the vector we really want, it also shifts the indices to the
+      range from 0 to n - 1
+      */
+      std::vector<integer> permut(ipiv.size());
+
+      for (size_t i = 0; i < permut.size(); i++){
+        permut[i] = i;
+      }
+
+      integer tmp = 0;
+      for (size_t i = 0; i < ipiv.size(); i++){
+        tmp = permut[i];
+        permut[i] = permut[ipiv[i] - 1];
+        permut[ipiv[i] - 1] = tmp;
+      }
+
+      for (size_t i = 0; i < permut.size(); i++) {
         for (size_t j = 0; j < a.width(); j++) {
-          if (i == ipiv[j])
+          if (i == permut[j])
             P(i, j) = 1;
           else
             P(i, j) = 0;
@@ -235,7 +257,7 @@ namespace ASC_bla
       }
       return P;
 
-    };
+    }
   };
 
   /*

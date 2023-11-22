@@ -117,6 +117,7 @@ int LUtests() {
 
   Matrix<double> inv(lu.Inverse());
   std::cout  << inv << std::endl;
+  std::cout  << inv*A << std::endl;
 
   return 0;                              
 }

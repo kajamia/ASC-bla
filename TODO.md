@@ -17,14 +17,13 @@ This is a file to keep track of homeworks and progress.
 - [ ] PyPI?
 - [x] (Kaja) Neo-HPC as submodule!
 - [x] merge everything :tada:
-- [ ] continue documentation
-- [ ] dividieren für simd 
-- [ ] SIMD<double,2> class machen
-- [ ] (Kaja) <= operator in simd_avx.h
 
 
 ### Until 23.11.
 
+- [ ] (Kaja) <= operator in simd_avx.h
+- [ ] dividieren für simd
 - [ ] test added arithmetic operations
+- [ ] (Norbert) SIMD<double,2> class machen
 - [ ] fast matrix multiplication :rocket:
-- [ ] continue documentation
+- [ ] (all) continue documentation
