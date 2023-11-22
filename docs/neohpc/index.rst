@@ -8,3 +8,4 @@ an integrated high performance computing backend of `Neo-CLA <https://github.com
 .. toctree::
     :maxdepth: 2
 
+    simd

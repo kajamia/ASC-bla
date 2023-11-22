@@ -11,7 +11,7 @@ This is a file to keep track of homeworks and progress.
 
 - [x] Inverse
 - [x] Python
-- [ ] (Vivien) LU
+- [X] (Vivien, Norbert) LU
 - [ ] (Kaja, Vivien) LU as Python
 - [ ] more Lapack?
 - [ ] PyPI?
@@ -21,9 +21,9 @@ This is a file to keep track of homeworks and progress.
 
 ### Until 23.11.
 
-- [ ] (Kaja) <= operator in simd_avx.h
-- [ ] dividieren für simd
-- [ ] test added arithmetic operations
-- [ ] (Norbert) SIMD<double,2> class machen
-- [ ] fast matrix multiplication :rocket:
+- [X] (Kaja) <=, <, >, >= operators in simd_avx.h
+- [X] (Norbert) dividieren für simd
+- [X] test added arithmetic operations
+- [X] (Norbert) SIMD<double,2> class machen
+- [ ] (Daniel, Kaja, Norbert) fast matrix multiplication :rocket:
 - [ ] (all) continue documentation
