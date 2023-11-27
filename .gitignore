@@ -3,7 +3,8 @@
 build/
 docs/_build/
 _skbuild/
-ASCsoft.egg-info
+ASCsoft.egg-info/
+.vscode/
 
 
 # FROM CMAKE

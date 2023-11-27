@@ -12,7 +12,7 @@ This is a file to keep track of homeworks and progress.
 - [x] Inverse
 - [x] Python
 - [X] (Vivien, Norbert) LU
-- [ ] (Kaja, Vivien) LU as Python
+- [ ] (Kaja, Vivien) LapackLU binding for Python
 - [ ] more Lapack?
 - [ ] PyPI?
 - [x] (Kaja) Neo-HPC as submodule!
