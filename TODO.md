@@ -27,3 +27,12 @@ This is a file to keep track of homeworks and progress.
 - [X] (Norbert) SIMD<double,2> class machen
 - [ ] (Daniel, Kaja, Norbert) fast matrix multiplication :rocket:
 - [ ] (all) continue documentation
+
+
+### Until 7.12.
+- [ ] solve all technical issues
+- [ ] initializer list constructor for Vector
+- [ ] Euler
+- [ ] Crank-Nicholson
+- [ ] electric network simulation
+- [ ] rename namespace
