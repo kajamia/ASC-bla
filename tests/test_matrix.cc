@@ -46,6 +46,8 @@ void misc_tests(){
                                8, 9, 10, 11, 12, 13, 14,
                                15, 16, 17, 18, 19, 20, 21,
                                22, 23, 24, 25, 26, 27, 28});
+  
+  std::cout << "Diag of F=" << F.Diag() << std::endl;
 
 /*   for (size_t i=0; i < E.height(); i++){
     std::cout << E.Row(i) << std::endl;

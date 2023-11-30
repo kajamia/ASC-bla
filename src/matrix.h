@@ -170,7 +170,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
       else{
         min = height_;
       }
-      return VectorView<T> (min, dist_+1, data_);
+      return VectorView<T, size_t> (min, dist_+1, data_);
   }
 
   // returns the submatrix from row start with given height
