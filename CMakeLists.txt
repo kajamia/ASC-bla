@@ -32,6 +32,7 @@ find_package(LAPACK REQUIRED)
 add_executable (test_lapack tests/test_lapack.cc)
 target_link_libraries (test_lapack PUBLIC LAPACK::LAPACK)
 
+add_executable(test_fastmult tests/test_fastmult.cc)
 
 pybind11_add_module(bla src/bind_bla.cpp)
 
