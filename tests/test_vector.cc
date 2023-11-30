@@ -32,6 +32,8 @@ int main()
   std::cout << "x = " << x << std::endl; 
 
   std::cout << bla::Vector({1, 2, 3, 4})  << std::endl;
+
+  std::cout << L2Norm(bla::Vector({1, 2, 0, 4})) << std::endl;
 }
 
 

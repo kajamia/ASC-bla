@@ -16,14 +16,12 @@ namespace ASC_bla {
 enum ORDERING { RowMajor, ColMajor };
 
 
-template <typename T, ORDERING ORD>
+template <typename T = double, ORDERING ORD = RowMajor>
 class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
 {
  protected:
   size_t height_, width_, dist_;
   T *data_;
-
-  // TODO Inverse(MatrixView) (outside of MatrixView)
 
  public:
   // constructor
@@ -38,13 +36,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   
   // constructor with dist argument
   MatrixView(size_t height, size_t width, size_t dist, T *data)
-    : height_(height), width_(width), dist_(dist), data_(data) {;};
-
-  
-  /* // copy constructor, for good measure
-  MatrixView(const MatrixView<T, ORD> & A)
-    : height_(A.height_), width_(A.width_), dist_(A.dist_), data_(A.data_) {;} */
-  
+    : height_(height), width_(width), dist_(dist), data_(data) {;};  
 
   // assignment operator
   template <typename TB>
@@ -59,6 +51,25 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
           data_[dist_ * i + j] = M(i, j);
         } else {
           data_[dist_ * j + i] = M(i, j);
+        }
+      }
+    }
+    return *this;
+  }
+
+  // operator +=
+  template <typename TB>
+  MatrixView &operator+=(const MatrixExpr<TB> & M) {
+    if (height_ != M.height() || width_ != M.width()){
+      throw std::invalid_argument("setting matrixview to matrixexpr of different size not supported");
+    }
+
+    for (size_t i = 0; i < height_; i++) {
+      for (size_t j = 0; j < width_; j++) {
+        if constexpr (ORD == RowMajor) {
+          data_[dist_ * i + j] += M(i, j);
+        } else {
+          data_[dist_ * j + i] += M(i, j);
         }
       }
     }
@@ -91,6 +102,20 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
           data_[dist_ * i + j] = scal;
         } else {
           data_[dist_ * j + i] = scal;
+        }
+      }
+    }
+    return *this;
+  }
+
+  // multiply all matrix components with scal
+  MatrixView & operator*= (T scal) {
+    for (size_t i = 0; i < height_; i++) {
+      for (size_t j = 0; j < width_; j++) {
+        if constexpr (ORD == RowMajor) {
+          data_[dist_ * i + j] *= scal;
+        } else {
+          data_[dist_ * j + i] *= scal;
         }
       }
     }

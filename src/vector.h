@@ -1,7 +1,10 @@
 #ifndef FILE_VECTOR_H
 #define FILE_VECTOR_H
 
+#include <exception>
 #include <iostream>
+#include <cmath>
+
 
 #include "expression.h"
 
@@ -33,10 +36,33 @@ namespace ASC_bla
       return *this;
     }
 
+    template <typename TB>
+    VectorView & operator+= (const VecExpr<TB> & v2)
+    {
+      for (size_t i = 0; i < size_; i++)
+        data_[dist_*i] += v2(i);
+      return *this;
+    }
+
+    template <typename TB>
+    VectorView & operator-= (const VecExpr<TB> & v2)
+    {
+      for (size_t i = 0; i < size_; i++)
+        data_[dist_*i] -= v2(i);
+      return *this;
+    }
+
     VectorView & operator= (T scal)
     {
       for (size_t i = 0; i < size_; i++)
         data_[dist_*i] = scal;
+      return *this;
+    }
+
+    VectorView & operator*= (T scal)
+    {
+      for (size_t i = 0; i < size_; i++)
+        data_[dist_*i] *= scal;
       return *this;
     }
     
@@ -54,19 +80,13 @@ namespace ASC_bla
     auto Slice(size_t first, size_t slice) const {
       return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
     }
-    
-    VectorView & operator*= (T scal){
-      for (size_t i = 0; i < size_; i++)
-        data_[dist_*i] *= scal;
-      return *this;
-    }
       
   };
   
   
 
   
-  template <typename T>
+  template <typename T = double>
   class Vector : public VectorView<T>
   {
     typedef VectorView<T> BASE;
@@ -125,6 +145,28 @@ namespace ASC_bla
     
   };
 
+  // scalar product
+  template <typename T1, typename T2, typename TDIST1, typename TDIST2>
+  auto operator* (VectorView<T1, TDIST1> v1, VectorView<T2, TDIST2> v2){
+    // error handling
+    if (v1.Size() != v2.Size()){
+      throw std::invalid_argument("vectors need to have same length for scalar product");
+    }
+
+    decltype(T1(0)*T2(0)) product = 0;
+
+    for (size_t i = 0; i < v1.Size(); i++){
+      product += v1(i)*v2(i);
+    }
+
+    return product;
+  }
+
+  // 2-norm for vectors
+  template <typename T, typename TDIST>
+  auto L2Norm (VectorView<T, TDIST> v){
+    return std::sqrt(v*v);
+  }
 
   template <typename ...Args>
   std::ostream & operator<< (std::ostream & ost, const VectorView<Args...> & v)
