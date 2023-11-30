@@ -11,7 +11,7 @@ namespace ASC_bla
 
 
  
-  template <typename T, typename TDIST = std::integral_constant<size_t,1> >
+  template <typename T = double, typename TDIST = std::integral_constant<size_t,1> >
   class VectorView : public VecExpr<VectorView<T,TDIST>>
   {
   protected:
@@ -94,6 +94,15 @@ namespace ASC_bla
       : Vector(v.Size())
     {
       *this = v;
+    }
+
+    // initializer list constructor
+    Vector (std::initializer_list<T> list)
+    : VectorView<T> (list.size(), new T[list.size()]) {
+    // copy list
+    for (size_t i = 0; i < list.size(); i++){
+      data_[i] = list.begin()[i];
+    }
     }
     
     

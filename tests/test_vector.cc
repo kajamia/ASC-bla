@@ -29,7 +29,9 @@ int main()
   x.Range(2,9) = 3;
   x.Slice(1,5) = 10;
   
-  std::cout << "x = " << x << std::endl;  
+  std::cout << "x = " << x << std::endl; 
+
+  std::cout << bla::Vector({1, 2, 3, 4})  << std::endl;
 }
 
 

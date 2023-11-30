@@ -31,7 +31,7 @@ This is a file to keep track of homeworks and progress.
 
 ### Until 7.12.
 - [ ] solve all technical issues
-- [ ] initializer list constructor for Vector
+- [X] initializer list constructor for Vector
 - [ ] Euler
 - [ ] Crank-Nicholson
 - [ ] electric network simulation
