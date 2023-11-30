@@ -114,22 +114,21 @@ Comparison operators
 
 Neo-CLA is able to do the following comparisons for SIMD objects (integers and doubles): gt, ge, lt, le
 
-Some examples:
+.. cpp:function:: inline SIMD<mask64,4> operator>= (SIMD<int64_t,4> a, SIMD<int64_t,4> b)
 
+Compares two SIMD int_64 objects and returns true/falls according to if a>=b. Analogue for the other comparison operators.
+(Since there is no a>=b, we return !(b>a). For the same reason we return !(a>b) for a<=b).
+
+.. cpp:function:: inline auto operator>= (SIMD<double,4> a, SIMD<double,4> b)
+
+Compares two SIMD double objects and returns true/falls according to if a>=b. Analogue for the other comparison operators.
+
+Example:
 .. code-block:: C++
     
-    inline SIMD<mask64,4> operator>= (SIMD<int64_t,4> a, SIMD<int64_t,4> b){
-        return  _mm256_xor_si256(_mm256_cmpgt_epi64(b.Val(),a.Val()),_mm256_set1_epi32(-1)); }
-
-Compares two SIMD int_64 objects and returns true/falls according to if a>=b. 
-(Since there is no a>=b, we return !(b>a). For the same reason we we return !(a>b) for a<=b)
-
-.. code-block:: C++
-
-    inline auto operator>= (SIMD<double,4> a, SIMD<double,4> b)
-  { return SIMD<mask64,4>(_mm256_cmp_pd (a.Val(), b.Val(), _CMP_GE_OQ)); }
-
-Compares two SIMD double objects and returns true/falls according to if a>=b.
+    SIMD<double,4> a(1.,2.,3.,4.);
+    auto mask1 = (2 >= a);
+    cout << "2 >= " << double_test << " = " << mask1 << endl;
 
 
 Arithmetic operations
