@@ -164,13 +164,13 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   //returns diagonal of Matrix as a VectorView
   auto Diag(){
       size_t min = 0;
-      if height_ > width_ {
+      if (height_ > width_) {
         min = width_;
       }
       else{
         min = height_;
       }
-      return VectorView<T, dist_+1> (min, data_);
+      return VectorView<T> (min, dist_+1, data_);
   }
 
   // returns the submatrix from row start with given height
