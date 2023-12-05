@@ -2,7 +2,7 @@
 #define FILE_EXPRESSION_H
 
 
-namespace ASC_bla
+namespace Neo_CLA
 {
 
   template <typename T>

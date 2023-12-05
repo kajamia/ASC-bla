@@ -9,11 +9,9 @@
 #include "expression.h"
 
 
-namespace ASC_bla
+namespace Neo_CLA
 {
-
-
- 
+   
   template <typename T = double, typename TDIST = std::integral_constant<size_t,1> >
   class VectorView : public VecExpr<VectorView<T,TDIST>>
   {
@@ -28,6 +26,14 @@ namespace ASC_bla
     VectorView (size_t size, TDIST dist, T * data)
       : data_(data), size_(size), dist_(dist) { }
     
+    template <typename TB>
+    VectorView & operator= (const VectorView<TB> & v2)
+    {
+      for (size_t i = 0; i < size_; i++)
+        data_[dist_*i] = v2(i);
+      return *this;
+    }
+
     template <typename TB>
     VectorView & operator= (const VecExpr<TB> & v2)
     {

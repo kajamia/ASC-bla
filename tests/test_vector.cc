@@ -2,13 +2,13 @@
 
 #include <vector.h>
 
-namespace bla = ASC_bla;
+namespace cla = Neo_CLA;
 
 
 int main()
 {
   size_t n = 10;
-  bla::Vector<double> x(n), y(n);
+  cla::Vector<double> x(n), y(n);
 
   for (size_t i = 0; i < x.Size(); i++)
     {
@@ -16,7 +16,7 @@ int main()
       y(i) = 10;
     }
 
-  bla::Vector<double> z = x+y;
+  cla::Vector<double> z = x+y;
   
   std::cout << "x+y = " << z << std::endl;
   
@@ -31,9 +31,12 @@ int main()
   
   std::cout << "x = " << x << std::endl; 
 
-  std::cout << bla::Vector({1, 2, 3, 4})  << std::endl;
+  std::cout << cla::Vector({1, 2, 3, 4})  << std::endl;
 
-  std::cout << L2Norm(bla::Vector({1, 2, 0, 4})) << std::endl;
+  std::cout << L2Norm(cla::Vector({1, 2, 0, 4})) << std::endl;
+
+  x.Range(2,6) = cla::Vector({1, 2, 0, 4});
+  std::cout << "x = " << x << std::endl;
 }
 
 

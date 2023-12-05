@@ -8,7 +8,7 @@ Hey! Welcome to Neo-CLA's documentation!
 
 Neo-cla is a C++ library for basic linear algebra (bla) operations.
 It is a fork of `ASC-bla <https://github.com/TUWien-ASC/ASC-bla>`_.
-Thus, it provides its contents within the **ASC_bla** namespace.
+Thus, it provides its contents within the **Neo_CLA** namespace.
 
 Neo-CLA gives you:
  - Matrix and vector operations (fast C++)

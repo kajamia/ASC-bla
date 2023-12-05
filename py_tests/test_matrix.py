@@ -1,5 +1,5 @@
 # import from the installed ASCsoft package:
-from ASCsoft.bla import Vector, Matrix
+from Neosoft.cla import Vector, Matrix
 
 import time
 import pickle

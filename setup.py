@@ -8,10 +8,10 @@ if 'win32' in sys.platform:
 
     
 setup(
-    name="ASCsoft",
+    name="Neosoft",
     version="0.0.2",
-    author="J. Schoeberl",
+    author="Kaja M., Vivien R. Dániel L., Norbert H.",
     license="MIT",
-    packages=["ASCsoft"],
+    packages=["Neosoft"],
     cmake_args=_cmake_args
 )

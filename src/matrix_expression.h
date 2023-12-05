@@ -3,7 +3,9 @@
 
 #include "matrix.h"
 #include "expression.h"
-namespace ASC_bla
+
+
+namespace Neo_CLA
 {
 
 // T, in this case, is not the scalar but MatrixView<T, ORD> (and the latter T is the scalar type)

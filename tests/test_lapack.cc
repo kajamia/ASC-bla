@@ -5,7 +5,7 @@
 #include <lapack_interface.h>
 #include <matrix.h>
 
-using namespace ASC_bla;
+using namespace Neo_CLA;
 using namespace std;
 
 void testmatmul() {

@@ -1,4 +1,4 @@
-# The main todo and homework list for the kajamia/ASC-bla project
+# The main todo and homework list for the kajamia/Neo_CLA project
 This is a file to keep track of homeworks and progress.
 
 ### Until 9.11.
@@ -32,7 +32,9 @@ This is a file to keep track of homeworks and progress.
 ### Until 7.12.
 - [ ] solve all technical issues
 - [X] initializer list constructor for Vector
+- [ ] fixed sized vector class (see TUChat)
+- [X] VectorView operator= (see TUChat)
 - [ ] Euler
 - [ ] Crank-Nicholson
 - [ ] electric network simulation
-- [ ] rename namespace
+- [X] rename namespace

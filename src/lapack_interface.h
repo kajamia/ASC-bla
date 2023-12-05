@@ -35,7 +35,7 @@ extern "C" {
 
 
 
-namespace ASC_bla
+namespace Neo_CLA
 {
   
   // BLAS-1 functions:

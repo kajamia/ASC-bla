@@ -10,7 +10,7 @@
 #include "expression.h"
 
 
-namespace ASC_bla {
+namespace Neo_CLA {
 
 // choice of row or column major, for template
 enum ORDERING { RowMajor, ColMajor };

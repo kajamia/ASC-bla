@@ -6,7 +6,7 @@
 #include "fastmult.cpp"
 
 
-using namespace ASC_bla;
+using namespace Neo_CLA;
 
 void precision_test(){
   Matrix<double> A (4, 7, {1, 2, 3, 4, 5, 6, 7,

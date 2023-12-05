@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
-project(ASC_bla)
+project(Neo_CLA)
 
 set (CMAKE_CXX_STANDARD 17)
 
 include_directories(src)
+include_directories(external_dependencies/HPC/src)
 
 find_package(Python 3.8 COMPONENTS Interpreter Development REQUIRED)
 
@@ -34,8 +35,8 @@ target_link_libraries (test_lapack PUBLIC LAPACK::LAPACK)
 
 # add_executable(test_fastmult tests/test_fastmult.cc)
 
-pybind11_add_module(bla src/bind_bla.cpp)
+pybind11_add_module(cla src/bind_cla.cpp)
 
-install (TARGETS bla DESTINATION ASCsoft)
-install (FILES src/matrix.h DESTINATION ASCsoft/include)
-install (FILES src/vector.h DESTINATION ASCsoft/include)
+install (TARGETS cla DESTINATION Neosoft)
+install (FILES src/matrix.h DESTINATION Neosoft/include)
+install (FILES src/vector.h DESTINATION Neosoft/include)
