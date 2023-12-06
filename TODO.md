@@ -25,7 +25,7 @@ This is a file to keep track of homeworks and progress.
 - [X] (Norbert) dividieren für simd
 - [X] test added arithmetic operations
 - [X] (Norbert) SIMD<double,2> class machen
-- [ ] (Daniel, Kaja, Norbert) fast matrix multiplication :rocket:
+- [ ] (all) fast matrix multiplication :rocket:
 - [ ] (all) continue documentation
 
 
@@ -38,3 +38,7 @@ This is a file to keep track of homeworks and progress.
 - [ ] Crank-Nicholson
 - [ ] electric network simulation
 - [X] rename namespace
+
+
+### Until 14.12.
+

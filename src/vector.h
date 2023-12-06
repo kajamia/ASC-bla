@@ -43,6 +43,14 @@ namespace Neo_CLA
     }
 
     template <typename TB>
+    VectorView & operator= (std::initializer_list<TB> list)
+    {
+      for (size_t i = 0; i < size_; i++)
+        data_[dist_*i] = list.begin()[i];
+      return *this;
+    }
+
+    template <typename TB>
     VectorView & operator+= (const VecExpr<TB> & v2)
     {
       for (size_t i = 0; i < size_; i++)
@@ -183,6 +191,14 @@ namespace Neo_CLA
       ost << ", " << v(i);
     return ost;
   }
+
+
+  // fixed-size vector
+  template <int SIZE, typename T>
+  class Vec : public VecExpr<Vec<SIZE,T>>
+  {
+  T data[SIZE];
+  };
   
 }
 
