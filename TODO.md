@@ -26,19 +26,28 @@ This is a file to keep track of homeworks and progress.
 - [X] test added arithmetic operations
 - [X] (Norbert) SIMD<double,2> class machen
 - [ ] (all) fast matrix multiplication :rocket:
-- [ ] (all) continue documentation
-
 
 ### Until 7.12.
-- [ ] solve all technical issues
 - [X] initializer list constructor for Vector
 - [ ] fixed sized vector class (see TUChat)
 - [X] VectorView operator= (see TUChat)
-- [ ] Euler
-- [ ] Crank-Nicholson
+- [ ] Explicit Euler
+- [X] Crank-Nicholson
+- [ ] Visualisation
 - [ ] electric network simulation
 - [X] rename namespace
 
 
 ### Until 14.12.
-- [ ] Runge-Kutta
+- [ ] Runge-Kutta (ist bei Schöberl auf einem Branch?)
+- [ ] important: fix test_alpha, test_newmark
+- [ ] fix everything in the folder mass_spring
+
+
+### Until 11.01.
+
+
+### Until 18.01.
+
+
+- [ ] (all) continue documentation

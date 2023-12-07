@@ -356,8 +356,8 @@ Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
 			Elementary column ops (=Reienopperator): Swap 2 columns, multiply a column by a scalar & add 2 columns
 	*/
 
-  // pivot element algorithm with pivot element at (i, j)
-  auto pivot = [](MatrixView<T, ORD> M, MatrixView<T, ORD> I, size_t i, size_t j, size_t n){
+  // implements pivot element algorithm with pivot element at (i, j)
+  auto do_pivot = [](MatrixView<T, ORD> M, MatrixView<T, ORD> I, size_t i, size_t j, size_t n){
     // copying out the pivot column(s)
     auto pivcolM = M.Col(j);
     auto pivcolI = I.Col(j);
@@ -413,7 +413,8 @@ Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
   for (size_t i=0; i < n; i++){
     for (size_t j=i; j < n; j++){
       if (M(i, j) != 0){
-        pivot(M, I, i, j, n);
+        // now, the pivot element has been found
+        do_pivot(M, I, i, j, n); // the actual pivoting
         break;
       }
       else if (j == (n-1)) {
