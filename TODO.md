@@ -41,4 +41,4 @@ This is a file to keep track of homeworks and progress.
 
 
 ### Until 14.12.
-
+- [ ] Runge-Kutta

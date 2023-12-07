@@ -3,7 +3,7 @@
 build/
 docs/_build/
 _skbuild/
-ASCsoft.egg-info/
+Neosoft.egg-info/
 .vscode/
 
 

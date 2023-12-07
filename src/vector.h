@@ -25,6 +25,9 @@ namespace Neo_CLA
     
     VectorView (size_t size, TDIST dist, T * data)
       : data_(data), size_(size), dist_(dist) { }
+
+    VectorView(const VectorView<T, TDIST> & V)
+      : data_(V.data_), size_(V.size_), dist_(V.dist_) { }
     
     template <typename TB>
     VectorView & operator= (const VectorView<TB> & v2)

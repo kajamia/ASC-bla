@@ -28,6 +28,12 @@ Requirements
 Installation
 ------------
 
+.. admonition:: Windows Support
+    :class: warning
+
+    Please note that this library currently only supports Linux and MacOS!
+
+
 Installation is via git-clone:
 
 ..  code-block:: bash

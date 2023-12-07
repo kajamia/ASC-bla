@@ -36,7 +36,11 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   
   // constructor with dist argument
   MatrixView(size_t height, size_t width, size_t dist, T *data)
-    : height_(height), width_(width), dist_(dist), data_(data) {;};  
+    : height_(height), width_(width), dist_(dist), data_(data) {;};
+
+  // copy constructor
+  MatrixView(const MatrixView<T, ORD> & A)
+    : height_(A.height_), width_(A.width_), dist_(A.dist_), data_(A.data_) {;}
 
   // assignment operator
   template <typename TB>
@@ -355,7 +359,7 @@ Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
   // pivot element algorithm with pivot element at (i, j)
   auto pivot = [](MatrixView<T, ORD> M, MatrixView<T, ORD> I, size_t i, size_t j, size_t n){
     // copying out the pivot column(s)
-    auto pivcolM = M.Col(j); 
+    auto pivcolM = M.Col(j);
     auto pivcolI = I.Col(j);
 
     // turning the pivot column into the i-th column
@@ -394,7 +398,7 @@ Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
   Matrix<T, ORD> I (n, n);
 
   for (size_t i=0; i < n; i++){
-    for (size_t j=i; j < n; j++){
+    for (size_t j=0; j < n; j++){
       if (i == j){
         I(i, j) = 1;
       }
@@ -405,7 +409,7 @@ Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M) {
   }
 
   // Perform elementary column operations
-  // i is the pivot row
+  // i is the pivot row, j the pivot column
   for (size_t i=0; i < n; i++){
     for (size_t j=i; j < n; j++){
       if (M(i, j) != 0){
