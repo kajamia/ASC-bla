@@ -81,7 +81,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
   }
 
   // assignment operator
-  MatrixView &operator=(const MatrixView<T, ORD> & M) {
+  MatrixView &operator=(const MatrixView & M) {
     if (height_ != M.height() || width_ != M.width()){
       throw std::invalid_argument("setting matrixview to matrixview of different size not supported");
     }
