@@ -34,6 +34,25 @@ namespace Neo_CLA
   }
 
 
+  template <typename TA, typename TB>
+  class DifferenceVecExpr : public VecExpr<DifferenceVecExpr<TA,TB>>
+  {
+    TA a_;
+    TB b_;
+  public:
+    DifferenceVecExpr (TA a, TB b) : a_(a), b_(b) { }
+
+    auto operator() (size_t i) const { return a_(i)-b_(i); }
+    size_t Size() const { return a_.Size(); }      
+  };
+  
+  template <typename TA, typename TB>
+  auto operator- (const VecExpr<TA> & a, const VecExpr<TB> & b)
+  {
+    return DifferenceVecExpr(a.Upcast(), b.Upcast());
+  }
+
+
 
   
   template <typename TSCAL, typename TV>
@@ -64,6 +83,30 @@ namespace Neo_CLA
     for (size_t i = 1; i < v.Size(); i++)
       ost << ", " << v(i);
     return ost;
+  }
+
+
+  // scalar product
+  template <typename T1, typename T2>
+  auto operator* (VecExpr<T1> v1, VecExpr<T2> v2){
+    // error handling
+    if (v1.Size() != v2.Size()){
+      throw std::invalid_argument("vectors need to have same length for scalar product");
+    }
+
+    decltype(v1(0)*v2(0)) product = 0;
+
+    for (size_t i = 0; i < v1.Size(); i++){
+      product += v1(i)*v2(i);
+    }
+
+    return product;
+  }
+
+  // 2-norm for vectors
+  template <typename T>
+  auto L2Norm (VecExpr<T> v){
+    return std::sqrt(v*v);
   }
   
 }

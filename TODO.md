@@ -31,17 +31,18 @@ This is a file to keep track of homeworks and progress.
 - [X] initializer list constructor for Vector
 - [ ] fixed sized vector class (see TUChat)
 - [X] VectorView operator= (see TUChat)
-- [ ] Explicit Euler
+- [X] Explicit Euler
 - [X] Crank-Nicholson
-- [ ] Visualisation
+- [X] Visualisation
 - [ ] electric network simulation
 - [X] rename namespace
 
 
 ### Until 14.12.
-- [ ] Runge-Kutta (ist bei Schöberl auf einem Branch?)
-- [ ] important: fix test_alpha, test_newmark
+- [ ] Runge-Kutta (ist bei Schöberl auf einem Branch)
+- [X] important: fix test_alpha, test_newmark
 - [ ] fix everything in the folder mass_spring
+- [ ] rename VecExpr to VectorExpr
 
 
 ### Until 11.01.

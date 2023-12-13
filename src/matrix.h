@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <exception>
 
+#include "forward_decl.h"
 #include "vector.h"
 #include "matrix_expression.h"
 #include "expression.h"
@@ -12,11 +13,8 @@
 
 namespace Neo_CLA {
 
-// choice of row or column major, for template
-enum ORDERING { RowMajor, ColMajor };
 
-
-template <typename T = double, ORDERING ORD = RowMajor>
+template <typename T, ORDERING ORD>
 class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
 {
  protected:

@@ -6,13 +6,14 @@
 #include <cmath>
 
 
+#include "forward_decl.h"
 #include "expression.h"
 
 
 namespace Neo_CLA
 {
    
-  template <typename T = double, typename TDIST = std::integral_constant<size_t,1> >
+  template <typename T, typename TDIST>
   class VectorView : public VecExpr<VectorView<T,TDIST>>
   {
   protected:
@@ -28,6 +29,13 @@ namespace Neo_CLA
 
     VectorView(const VectorView<T, TDIST> & V)
       : data_(V.data_), size_(V.size_), dist_(V.dist_) { }
+    
+    /* VectorView(const VecExpr<T> & V)
+      : data_(V.Size()), size_(V.Size()) {
+        for (size_t i=0; i < size_; i++){
+          data_[i] = V(i);
+        }
+      } */
     
     VectorView & operator= (const VectorView & v2)
     {
@@ -81,6 +89,13 @@ namespace Neo_CLA
         data_[dist_*i] *= scal;
       return *this;
     }
+
+    VectorView & operator/= (T scal)
+    {
+      for (size_t i = 0; i < size_; i++)
+        data_[dist_*i] /= scal;
+      return *this;
+    }
     
     auto View() const { return VectorView(size_, dist_, data_); }
     size_t Size() const { return size_; }
@@ -96,7 +111,12 @@ namespace Neo_CLA
     auto Slice(size_t first, size_t slice) const {
       return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
     }
-      
+
+    auto AsMatrix (size_t m, size_t n){
+      static_assert(std::is_same<TDIST, std::integral_constant<size_t,1> >::value == true, "gapped vectors cannot be converted to matrices");
+      return MatrixView<T, RowMajor> (m, n, data_);
+    }
+
   };
   
   
@@ -161,28 +181,7 @@ namespace Neo_CLA
     
   };
 
-  // scalar product
-  template <typename T1, typename T2, typename TDIST1, typename TDIST2>
-  auto operator* (VectorView<T1, TDIST1> v1, VectorView<T2, TDIST2> v2){
-    // error handling
-    if (v1.Size() != v2.Size()){
-      throw std::invalid_argument("vectors need to have same length for scalar product");
-    }
-
-    decltype(T1(0)*T2(0)) product = 0;
-
-    for (size_t i = 0; i < v1.Size(); i++){
-      product += v1(i)*v2(i);
-    }
-
-    return product;
-  }
-
-  // 2-norm for vectors
-  template <typename T, typename TDIST>
-  auto L2Norm (VectorView<T, TDIST> v){
-    return std::sqrt(v*v);
-  }
+  
 
   template <typename ...Args>
   std::ostream & operator<< (std::ostream & ost, const VectorView<Args...> & v)
@@ -196,10 +195,91 @@ namespace Neo_CLA
 
 
   // fixed-size vector
-  template <int SIZE, typename T>
+  template <int SIZE, typename T = double>
   class Vec : public VecExpr<Vec<SIZE,T>>
   {
   T data[SIZE];
+
+   public:
+    Vec (){};
+
+    Vec (const Vec<SIZE, T> & v2){
+      for (int i=0; i < SIZE; i++){
+        data[i] = v2(i);
+      }
+    }
+
+    Vec (T all){
+      for (size_t i=0; i < SIZE; i++){
+        data[i] = all;
+      }
+    };
+
+    // initializer list constructor
+    Vec (std::initializer_list<T> list){
+      if (list.size() != SIZE) throw std::invalid_argument("initializer list with wrong size");
+      // copy list
+      for (size_t i = 0; i < SIZE; i++){
+        data[i] = list.begin()[i];
+    }
+    }
+
+    // constructor from VectorView
+    template<typename T2, typename TDIST>
+    Vec (VectorView<T2, TDIST> v2){
+      if (v2.Size() != SIZE) throw std::invalid_argument("VectorView has wrong size");
+      // copy list
+      for (size_t i=0; i < SIZE; i++){
+        data[i] = v2(i);
+      }
+    }
+
+    // constructor from VecExpr
+    template<typename T2>
+    Vec (const VecExpr<T2> & v2){
+      if (v2.Size() != SIZE) throw std::invalid_argument("VecExpr has wrong size");
+
+      for (int i=0; i < SIZE; i++){
+        data[i] = v2(i);
+      }
+    }
+
+    // VectorView operator=
+    template<typename T2, typename TDIST>
+    Vec & operator= (VectorView<T2, TDIST> v2){
+      if (v2.Size() != SIZE) throw std::invalid_argument("VectorView has wrong size");
+      // copy list
+      for (size_t i=0; i < SIZE; i++){
+        data[i] = v2(i);
+      }
+      return *this;
+    }
+
+    Vec & operator= (const Vec<SIZE, T> & v2){
+      for (int i=0; i < SIZE; i++){
+        data[i] = v2(i);
+      }
+      return *this;
+    }
+
+    template<typename T2>
+    Vec & operator= (const VecExpr<T2> & v2){
+      if (v2.Size() != SIZE) throw std::invalid_argument("VecExpr has wrong size");
+
+      for (int i=0; i < SIZE; i++){
+        data[i] = v2(i);
+      }
+      return *this;
+    }
+
+    T operator() (size_t i) const{
+      return data[i];
+    }
+
+    T & operator() (size_t i){
+      return data[i];
+    }
+
   };
   
 }
