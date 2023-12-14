@@ -280,6 +280,8 @@ namespace Neo_CLA
       return data[i];
     }
 
+    size_t Size() const {return SIZE;}
+
   };
   
 }
