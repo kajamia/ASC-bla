@@ -46,6 +46,8 @@ This is a file to keep track of homeworks and progress.
 
 
 ### Until 11.01.
+- [ ] 18.4.1
+- [ ] 18.4.2
 
 
 ### Until 18.01.
