@@ -283,6 +283,29 @@ namespace Neo_CLA
     size_t Size() const {return SIZE;}
 
   };
+
+    // scalar product
+  template <typename T1, typename T2, typename TDIST1, typename TDIST2>
+  auto operator* (VectorView<T1, TDIST1> v1, VectorView<T2, TDIST2> v2){
+    // error handling
+    if (v1.Size() != v2.Size()){
+      throw std::invalid_argument("vectors need to have same length for scalar product");
+    }
+
+    decltype(T1(0)*T2(0)) product = 0;
+
+    for (size_t i = 0; i < v1.Size(); i++){
+      product += v1(i)*v2(i);
+    }
+
+    return product;
+  }
+
+  // 2-norm for vectors
+  template <typename T, typename TDIST>
+  auto L2Norm (VectorView<T, TDIST> v){
+    return std::sqrt(v*v);
+  }
   
 }
 
