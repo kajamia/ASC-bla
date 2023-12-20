@@ -42,8 +42,9 @@ This is a file to keep track of homeworks and progress.
 - [ ] Runge-Kutta (ist bei Schöberl auf einem Branch)
 - [X] important: fix test_alpha, test_newmark
 - [ ] fix everything in the folder mass_spring
-- [ ] rename VecExpr to VectorExpr?
+- [X] rename VecExpr to VectorExpr
 
+### Until 21.12 - haben wir Stunde ???
 
 ### Until 11.01.
 - [ ] 18.4.1
@@ -53,4 +54,4 @@ This is a file to keep track of homeworks and progress.
 ### Until 18.01.
 
 
-- [ ] (all) continue documentation
+- [ ] (all) continue documentation 
