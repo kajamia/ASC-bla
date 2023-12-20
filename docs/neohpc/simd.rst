@@ -119,8 +119,7 @@ Neo-CLA is able to do the following comparisons for SIMD objects (integers and d
 - >=
 - >
 
-Example for integers:
-
+**Example for integers:**
 .. cpp:function:: inline SIMD<mask64,4> operator>= (SIMD<int64_t,4> a, SIMD<int64_t,4> b)
 
 Compares two SIMD int_64 objects and returns true/falls according to if a>=b. Analogue for the other comparison operators.
@@ -129,13 +128,25 @@ Compares two SIMD int_64 objects and returns true/falls according to if a>=b. An
 .. code-block:: C++
     
     SIMD<int, 4> a(1,2,3,4);
-    auto mask1 = (2 >= a);
+    auto mask = (2 >= a);
 
-    cout << "2 >= " << a << " = " << mask1 << endl;
+    cout << "2 >= " << a << " = " << mask << endl;
 
+
+
+
+**Example for doubles:**
 .. cpp:function:: inline auto operator>= (SIMD<double,4> a, SIMD<double,4> b)
 
 Compares two SIMD double objects and returns true/falls according to if a>=b. Analogue for the other comparison operators.
+
+.. code-block:: C++
+    
+    SIMD<int, 4> a(1., 2, 3.1415);
+    auto mask = (2. >= a);
+
+    cout << "2 >= " << a << " = " << mask << endl;
+
 
 
 Arithmetic operations
