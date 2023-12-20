@@ -6,7 +6,7 @@ namespace Neo_CLA
 {
 
   template <typename T>
-  class VecExpr
+  class VectorExpr
   {
   public:
     auto Upcast() const { return static_cast<const T&> (*this); }
@@ -16,7 +16,7 @@ namespace Neo_CLA
   
  
   template <typename TA, typename TB>
-  class SumVecExpr : public VecExpr<SumVecExpr<TA,TB>>
+  class SumVecExpr : public VectorExpr<SumVecExpr<TA,TB>>
   {
     TA a_;
     TB b_;
@@ -28,14 +28,14 @@ namespace Neo_CLA
   };
   
   template <typename TA, typename TB>
-  auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
+  auto operator+ (const VectorExpr<TA> & a, const VectorExpr<TB> & b)
   {
     return SumVecExpr(a.Upcast(), b.Upcast());
   }
 
 
   template <typename TA, typename TB>
-  class DifferenceVecExpr : public VecExpr<DifferenceVecExpr<TA,TB>>
+  class DifferenceVecExpr : public VectorExpr<DifferenceVecExpr<TA,TB>>
   {
     TA a_;
     TB b_;
@@ -47,7 +47,7 @@ namespace Neo_CLA
   };
   
   template <typename TA, typename TB>
-  auto operator- (const VecExpr<TA> & a, const VecExpr<TB> & b)
+  auto operator- (const VectorExpr<TA> & a, const VectorExpr<TB> & b)
   {
     return DifferenceVecExpr(a.Upcast(), b.Upcast());
   }
@@ -56,7 +56,7 @@ namespace Neo_CLA
 
   
   template <typename TSCAL, typename TV>
-  class ScaleVecExpr : public VecExpr<ScaleVecExpr<TSCAL,TV>>
+  class ScaleVecExpr : public VectorExpr<ScaleVecExpr<TSCAL,TV>>
   {
     TSCAL scal_;
     TV vec_;
@@ -68,7 +68,7 @@ namespace Neo_CLA
   };
   
   template <typename T>
-  auto operator* (double scal, const VecExpr<T> & v)
+  auto operator* (double scal, const VectorExpr<T> & v)
   {
     return ScaleVecExpr(scal, v.Upcast());
   }
@@ -76,7 +76,7 @@ namespace Neo_CLA
 
 
   template <typename T>
-  std::ostream & operator<< (std::ostream & ost, const VecExpr<T> & v)
+  std::ostream & operator<< (std::ostream & ost, const VectorExpr<T> & v)
   {
     if (v.Size() > 0)
       ost << v(0);
@@ -88,7 +88,7 @@ namespace Neo_CLA
 
   // scalar product
   template <typename T1, typename T2>
-  auto operator* (VecExpr<T1> v1, VecExpr<T2> v2){
+  auto operator* (VectorExpr<T1> v1, VectorExpr<T2> v2){
     // error handling
     if (v1.Size() != v2.Size()){
       throw std::invalid_argument("vectors need to have same length for scalar product");
@@ -105,7 +105,7 @@ namespace Neo_CLA
 
   // 2-norm for vectors
   template <typename T>
-  auto L2Norm (VecExpr<T> v){
+  auto L2Norm (VectorExpr<T> v){
     return std::sqrt(v*v);
   }
   

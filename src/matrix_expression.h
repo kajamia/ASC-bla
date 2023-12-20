@@ -74,7 +74,7 @@ auto operator* (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
 
 // Matrix * Vektor
 template <typename TA, typename TB>
-class ProdMatVecExpr : public VecExpr<ProdMatVecExpr<TA,TB>>
+class ProdMatVecExpr : public VectorExpr<ProdMatVecExpr<TA,TB>>
 {
   TA A_;
   TB b_;
@@ -96,7 +96,7 @@ public:
 };
 
 template <typename TA, typename TB>
-auto operator* (const MatrixExpr<TA> & A, const VecExpr<TB> & b)
+auto operator* (const MatrixExpr<TA> & A, const VectorExpr<TB> & b)
 {
   return ProdMatVecExpr(A.Upcast(), b.Upcast());
 }

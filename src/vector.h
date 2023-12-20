@@ -14,7 +14,7 @@ namespace Neo_CLA
 {
    
   template <typename T, typename TDIST>
-  class VectorView : public VecExpr<VectorView<T,TDIST>>
+  class VectorView : public VectorExpr<VectorView<T,TDIST>>
   {
   protected:
     T * data_;
@@ -45,7 +45,7 @@ namespace Neo_CLA
     }
 
     template <typename TB>
-    VectorView & operator= (const VecExpr<TB> & v2)
+    VectorView & operator= (const VectorExpr<TB> & v2)
     {
       for (size_t i = 0; i < size_; i++)
         data_[dist_*i] = v2(i);
@@ -61,7 +61,7 @@ namespace Neo_CLA
     }
 
     template <typename TB>
-    VectorView & operator+= (const VecExpr<TB> & v2)
+    VectorView & operator+= (const VectorExpr<TB> & v2)
     {
       for (size_t i = 0; i < size_; i++)
         data_[dist_*i] += v2(i);
@@ -69,7 +69,7 @@ namespace Neo_CLA
     }
 
     template <typename TB>
-    VectorView & operator-= (const VecExpr<TB> & v2)
+    VectorView & operator-= (const VectorExpr<TB> & v2)
     {
       for (size_t i = 0; i < size_; i++)
         data_[dist_*i] -= v2(i);
@@ -146,7 +146,7 @@ namespace Neo_CLA
     }
 
     template <typename TB>
-    Vector (const VecExpr<TB> & v)
+    Vector (const VectorExpr<TB> & v)
       : Vector(v.Size())
     {
       *this = v;
@@ -196,7 +196,7 @@ namespace Neo_CLA
 
   // fixed-size vector
   template <int SIZE, typename T = double>
-  class Vec : public VecExpr<Vec<SIZE,T>>
+  class Vec : public VectorExpr<Vec<SIZE,T>>
   {
   T data[SIZE];
 
@@ -236,7 +236,7 @@ namespace Neo_CLA
 
     // constructor from VecExpr
     template<typename T2>
-    Vec (const VecExpr<T2> & v2){
+    Vec (const VectorExpr<T2> & v2){
       if (v2.Size() != SIZE) throw std::invalid_argument("VecExpr has wrong size");
 
       for (int i=0; i < SIZE; i++){
@@ -263,7 +263,7 @@ namespace Neo_CLA
     }
 
     template<typename T2>
-    Vec & operator= (const VecExpr<T2> & v2){
+    Vec & operator= (const VectorExpr<T2> & v2){
       if (v2.Size() != SIZE) throw std::invalid_argument("VecExpr has wrong size");
 
       for (int i=0; i < SIZE; i++){
