@@ -154,6 +154,14 @@ PYBIND11_MODULE(cla, m) {
           return A;
         }
       ))
+
     ;
+
+
+
+  // LapackLU class
+    py::class_<LapackLU> (m, "LapackLU")
+    .def(py::init<Matrix<double,RowMajor>>(), "create new LapackLU object")
+    .def("Solve", &LapackLU::Solve, py::arg("b"))
 
 }

@@ -117,19 +117,21 @@ namespace Neo_CLA
   // | operator overload
 
 
-
+  template<ORDERING ORD>
   class LapackLU {
     Matrix <double, ColMajor> a;
     std::vector<integer> ipiv;
 
    public:
-    LapackLU (Matrix<double,ColMajor> _a)
+    LapackLU (Matrix<double, ORD> _a)
     : a(std::move(_a)), ipiv(a.height()) {
+
       // ColMajor is the least complicated way to work with dgetrf
       // however, typecasting makes it possible to pass any double matrix
       integer m = a.height();
       integer n = a.width();
       if (m == 0 || n == 0) throw std::invalid_argument("for LU, you need a matrix!");
+
       integer lda = a.Dist();
       integer info;
     
