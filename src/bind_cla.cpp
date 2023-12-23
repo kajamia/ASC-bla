@@ -17,6 +17,7 @@ PYBIND11_MODULE(cla, m) {
     py::class_<Vector<double>> (m, "Vector", py::buffer_protocol())
       .def(py::init<size_t>(),
            py::arg("size"), "create vector of given size")
+
       .def("__len__", &Vector<double>::Size,
            "return size of vector")
       

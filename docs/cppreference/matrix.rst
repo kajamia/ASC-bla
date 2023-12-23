@@ -1,11 +1,6 @@
 ===================
 Matrix computations
 ===================
-..
-    matrix sachen dokumentieren
-    youtube/google: ("restructured text" und "sphinx")
-    das dokumentieren was aufgabe war
-    norbert will JEDEN code in blöcken haben
 
 Matrix
 ------
@@ -58,7 +53,7 @@ It provides a versatile interface for accessing and manipulating matrix data, fo
 .. cpp:function:: MatrixView (size_t height, size_t width, T *data)
 .. cpp:function:: MatrixView (size_t height, size_t width, size_t dist, T *data)
 
-The constructors create a view into a matrix given its dimensions, data pointer, and optional distance between elements. MatrixView operates as a lightweight wrapper around existing data.
+The constructors create a view of matrix given its dimensions, data pointer, and optional distance between elements. MatrixView operates as a lightweight wrapper around existing data.
 
 T is the data type of the matrix elements, and ORD specifies whether the matrix is in RowMajor or ColMajor order.
 

@@ -12,7 +12,7 @@ This is a file to keep track of homeworks and progress.
 - [x] Inverse
 - [x] Python
 - [X] (Vivien, Norbert) LU
-- [ ] (Kaja, Vivien) LapackLU binding for Python
+- [ ] (Kaja) LapackLU binding for Python
 - [ ] more Lapack?
 - [ ] PyPI?
 - [x] (Kaja) Neo-HPC as submodule!
@@ -29,7 +29,7 @@ This is a file to keep track of homeworks and progress.
 
 ### Until 7.12.
 - [X] initializer list constructor for Vector
-- [ ] fixed sized vector class (see TUChat)
+- [X] fixed sized vector class (see TUChat)
 - [X] VectorView operator= (see TUChat)
 - [X] Explicit Euler
 - [X] Crank-Nicholson
