@@ -50,6 +50,9 @@ MatrixView
 MatrixView is a fundamental class that provides a view into a matrix. It inherits from MatrixExpr, allowing for expression-based matrix computations.
 It provides a versatile interface for accessing and manipulating matrix data, forming the foundation for various matrix computations.
 
+.. cpp:class:: template <typename T, ORDERING ORD>
+    class MatrixView : public MatrixExpr<MatrixView<T, ORD>
+
 .. cpp:function:: MatrixView (size_t height, size_t width, T *data)
 .. cpp:function:: MatrixView (size_t height, size_t width, size_t dist, T *data)
 
@@ -106,7 +109,7 @@ Returns a pointer to the underlying data of the matrix.
 
 .. cpp:function:: size_t & Dist()
 
-Returns a reference to the distance between elements in the matrix.
+Returns the distance in the data_ array to the element next to/underneath it (depending on whether it is RowMajor (underneath) or ColMajor (next to)).
 
 .. cpp:function:: T &operator()(size_t i, size_t j)
 .. cpp:function:: const T &operator()(size_t i, size_t j) const
@@ -138,3 +141,47 @@ Swaps two columns of the matrix efficiently using row-wise swapping.
 
 MatrixExpr
 ----------
+Matrix expressions provide a powerful mechanism for composing complex operations on matrices. These expressions enable concise and efficient representation of mathematical operations involving matrices, such as addition, multiplication, and scalar multiplication. Matrix expressions build upon the MatrixView class, facilitating the creation and manipulation of matrices.
+
+It is composed of three primary types: SumMatrixExpr, ProdMatrixExpr, and ProdScalMatExpr. These expressions represent addition, matrix multiplication, and scalar multiplication, respectively.
+
+.. cpp:class:: template <typename TA, typename TB>
+    class SumMatrixExpr : public MatrixExpr<SumMatrixExpr<TA, TB>> {
+      /*... */
+    };
+
+.. cpp:class:: template <typename TA, typename TB>
+    class ProdMatrixExpr : public MatrixExpr<ProdMatrixExpr<TA, TB>> {
+      /*... */
+    };
+
+.. cpp:class:: template <typename TSCAL, typename TMAT>
+    class ProdScalMatExpr : public MatrixExpr<ProdScalMatExpr<TSCAL, TMAT>> {
+      /*... */
+    };
+
+Addition (SumMatrixExpr)
+Element-wise addition of two matrices. It ensures that the matrices being added have compatible dimensions.
+
+.. cpp:function:: template <typename TA, typename TB>
+    auto operator+ (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B);
+
+Multiplication (ProdMatrixExpr)
+Matrix multiplication. It ensures that the number of columns in the first matrix matches the number of rows in the second matrix.
+
+.. cpp:function:: template <typename TA, typename TB>
+    auto operator* (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B);
+
+Scalar Multiplication (ProdScalMatExpr)
+Multiplication of a matrix by a scalar. It allows scaling each element of the matrix by the specified scalar.
+
+.. cpp:function:: template <typename TSCAL, typename TMAT>
+    auto operator* (double scal, const MatrixExpr<TMAT> & A);
+
+Matrix-Vector Product (ProdMatVecExpr)
+Multiplication of a matrix by a vector. It ensures that the number of columns in the matrix matches the size of the vector.
+
+.. cpp:function:: template <typename TA, typename TB>
+    auto operator* (const MatrixExpr<TA> & A, const VectorExpr<TB> & b);
+
+These expressions enhance the expressiveness and efficiency of matrix computations.
