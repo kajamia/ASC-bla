@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 include_directories(src)
 include_directories(external_dependencies/HPC/src)
+include_directories(external_dependencies/HPC/concurrentqueue)
 
 find_package(Python 3.8 COMPONENTS Interpreter Development REQUIRED)
 
