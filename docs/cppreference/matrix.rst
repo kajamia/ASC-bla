@@ -37,7 +37,7 @@ This is the main class of this project.
 Inverse
 -------
 
-.. cpp:function:: template <typename T, ORDERING ORD> \
+.. cpp:function:: template <typename T, ORDERING ORD>
     Matrix<T, ORD> Inverse (const Matrix<T, ORD> & M)
 
     This function computes the inverse of a Matrix
@@ -50,20 +50,22 @@ MatrixView
 MatrixView is a fundamental class that provides a view into a matrix. It inherits from MatrixExpr, allowing for expression-based matrix computations.
 It provides a versatile interface for accessing and manipulating matrix data, forming the foundation for various matrix computations.
 
-.. cpp:class:: template <typename T, ORDERING ORD>
-    class MatrixView : public MatrixExpr<MatrixView<T, ORD>
+    .. code-block:: cpp
 
-.. cpp:function:: MatrixView (size_t height, size_t width, T *data)
-.. cpp:function:: MatrixView (size_t height, size_t width, size_t dist, T *data)
+        Matrix<float, ColMajor> A(3000, 700);
+        MatrixView<float, ColMajor> viewA(A.height(), A.width(), A.Data());
 
-The constructors create a view of matrix given its dimensions, data pointer, and optional distance between elements. MatrixView operates as a lightweight wrapper around existing data.
+.. cpp:function:: MatrixView(size_t height, size_t width, T *data)
+
+    Constructor that creates a view of a matrix given its dimensions, data pointer, and optional distance between elements.
+
+.. cpp:function:: MatrixView(size_t height, size_t width, size_t dist, T *data)
+
+    Constructor with an additional parameter for specifying the distance between elements.
+
+The constructors create a view of the matrix given its dimensions, data pointer, and optional distance between elements. MatrixView operates as a lightweight wrapper around existing data.
 
 T is the data type of the matrix elements, and ORD specifies whether the matrix is in RowMajor or ColMajor order.
-
-.. code-block:: cpp
-
-    Matrix<float, ColMajor> A(3000, 700); // Create a matrix (ColMajor) with 3000 rows and 700 columns
-    MatrixView<float, ColMajor> viewA(A.height(), A.width(), A.Data()); // Create a view into matrix A
 
 .. admonition:: Important Note
     :class: warning
@@ -72,116 +74,68 @@ T is the data type of the matrix elements, and ORD specifies whether the matrix 
 
 .. cpp:function:: MatrixView(const MatrixView<T, ORD> & A)
 
-The copy constructor creates a new MatrixView that shares the same data as the original, allowing for efficient and memory-safe matrix operations.
+    Copy constructor that creates a new MatrixView that shares the same data as the original, allowing for efficient and memory-safe matrix operations.
 
 .. cpp:function:: MatrixView &operator=(const MatrixView & M)
 
-The assignment operator sets the values of the current MatrixView to those of another MatrixView. The matrices must have the same dimensions.
+    Assignment operator that sets the values of the current MatrixView to those of another MatrixView. The matrices must have the same dimensions.
 
 .. cpp:function:: MatrixView &operator=(const MatrixExpr<TB> & M)
 
-The assignment operator allows assigning the values of a MatrixExpr (such as another Matrix or MatrixView) to the current MatrixView.
+    Assignment operator that allows assigning the values of a MatrixExpr (such as another Matrix or MatrixView) to the current MatrixView.
 
 .. cpp:function:: MatrixView &operator+=(const MatrixExpr<TB> & M)
 
-The compound assignment operator adds the values of a MatrixExpr to the current MatrixView. The matrices must have the same dimensions.
+    Compound assignment operator that adds the values of a MatrixExpr to the current MatrixView. The matrices must have the same dimensions.
 
-.. cpp:function:: MatrixView &operator= (T scal)
+.. cpp:function:: MatrixView &operator=(T scal)
 
-Set all elements of the MatrixView to a scalar value.
+    Set all elements of the MatrixView to a scalar value.
 
-.. cpp:function:: MatrixView &operator*= (T scal)
+.. cpp:function:: MatrixView &operator*=(T scal)
 
-Multiply all elements of the MatrixView by a scalar value.
+    Multiply all elements of the MatrixView by a scalar value.
 
 .. cpp:function:: auto View() const
 
-Returns a new MatrixView to the current object, allowing for further manipulations.
+    Returns a new MatrixView to the current object, allowing for further manipulations.
 
 .. cpp:function:: size_t height() const
 .. cpp:function:: size_t width() const
 
-Returns the dimensions of the matrix.
+    Returns the dimensions of the matrix.
 
 .. cpp:function:: T* Data()
 
-Returns a pointer to the underlying data of the matrix.
+    Returns a pointer to the underlying data of the matrix.
 
 .. cpp:function:: size_t & Dist()
 
-Returns the distance in the data_ array to the element next to/underneath it (depending on whether it is RowMajor (underneath) or ColMajor (next to)).
+    Returns the distance in the data_ array to the element next to/underneath it (depending on whether it is RowMajor (underneath) or ColMajor (next to)).
 
 .. cpp:function:: T &operator()(size_t i, size_t j)
 .. cpp:function:: const T &operator()(size_t i, size_t j) const
 
-Accesses the elements of the matrix using round brackets. The behavior depends on the ordering (RowMajor or ColMajor).
+    Accesses the elements of the matrix using round brackets. The behavior depends on the ordering (RowMajor or ColMajor).
 
 .. cpp:function:: auto transposed() const
 
-Returns a transposed view of the matrix.
+    Returns a transposed view of the matrix.
 
 .. cpp:function:: auto Row(size_t i)
 .. cpp:function:: auto Col(size_t j)
 
-Returns a VectorView representing the i-th row or j-th column of the matrix.
+    Returns a VectorView representing the i-th row or j-th column of the matrix.
 
 .. cpp:function:: auto Diag()
 
-Returns a VectorView representing the diagonal of the matrix.
+    Returns a VectorView representing the diagonal of the matrix.
 
 .. cpp:function:: auto Rows(size_t start, size_t height)
 .. cpp:function:: auto Cols(size_t start, size_t width)
 
-Returns a MatrixView representing a submatrix obtained by selecting a range of rows or columns.
+    Returns a MatrixView representing a submatrix obtained by selecting a range of rows or columns.
 
 .. cpp:function:: void swapcols(size_t i, size_t j)
 
-Swaps two columns of the matrix efficiently using row-wise swapping.
-
-
-MatrixExpr
-----------
-Matrix expressions provide a powerful mechanism for composing complex operations on matrices. These expressions enable concise and efficient representation of mathematical operations involving matrices, such as addition, multiplication, and scalar multiplication. Matrix expressions build upon the MatrixView class, facilitating the creation and manipulation of matrices.
-
-It is composed of three primary types: SumMatrixExpr, ProdMatrixExpr, and ProdScalMatExpr. These expressions represent addition, matrix multiplication, and scalar multiplication, respectively.
-
-.. cpp:class:: template <typename TA, typename TB>
-    class SumMatrixExpr : public MatrixExpr<SumMatrixExpr<TA, TB>> {
-      /*... */
-    };
-
-.. cpp:class:: template <typename TA, typename TB>
-    class ProdMatrixExpr : public MatrixExpr<ProdMatrixExpr<TA, TB>> {
-      /*... */
-    };
-
-.. cpp:class:: template <typename TSCAL, typename TMAT>
-    class ProdScalMatExpr : public MatrixExpr<ProdScalMatExpr<TSCAL, TMAT>> {
-      /*... */
-    };
-
-Addition (SumMatrixExpr)
-Element-wise addition of two matrices. It ensures that the matrices being added have compatible dimensions.
-
-.. cpp:function:: template <typename TA, typename TB>
-    auto operator+ (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B);
-
-Multiplication (ProdMatrixExpr)
-Matrix multiplication. It ensures that the number of columns in the first matrix matches the number of rows in the second matrix.
-
-.. cpp:function:: template <typename TA, typename TB>
-    auto operator* (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B);
-
-Scalar Multiplication (ProdScalMatExpr)
-Multiplication of a matrix by a scalar. It allows scaling each element of the matrix by the specified scalar.
-
-.. cpp:function:: template <typename TSCAL, typename TMAT>
-    auto operator* (double scal, const MatrixExpr<TMAT> & A);
-
-Matrix-Vector Product (ProdMatVecExpr)
-Multiplication of a matrix by a vector. It ensures that the number of columns in the matrix matches the size of the vector.
-
-.. cpp:function:: template <typename TA, typename TB>
-    auto operator* (const MatrixExpr<TA> & A, const VectorExpr<TB> & b);
-
-These expressions enhance the expressiveness and efficiency of matrix computations.
+    Swaps two columns of the matrix efficiently using row-wise swapping.
