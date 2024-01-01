@@ -257,18 +257,16 @@ void blockmultparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A
 // the most powerful function
 // the same as multcachy, but with threads instead of loops
 // if TIMED is set to true, timing stats will be created
-template <bool TIMED, ORDERING ORD, typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96> >
+template <bool TIMED = false, typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96>, ORDERING ORD>
 void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, MatrixView<double, RowMajor> B)
 {
-  //constexpr size_t amount_workers = 7;
-
   BH bh;
   BW bw;
 
   if constexpr (TIMED) timeline = std::make_unique<TimeLine>("fastmult.trace");
 
-  // as many workers as larger "lines" that fit into C in https://jschoeberl.github.io/IntroSC/_images/matmat1.png
-  StartWorkers((A.height()/bh)); // (amount_workers);
+  // as many workers as threads supported by your machine, minus one
+  StartWorkers(std::thread::hardware_concurrency() - 1);
 
   RunParallel((A.height()/bh) + 1, [&](int i0, int s){
     std::mutex linemutex; // prevents race condition in kernel

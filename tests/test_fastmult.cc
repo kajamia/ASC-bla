@@ -80,7 +80,7 @@ void performance_test(){
   // is the result correct? if yes, all values of C - A*B lie around 0
   Matrix D = C - A*B;
   const auto [min, max] = std::minmax_element(D.Data(), D.Data() + D.height()*D.width());
-  std::cout << "max error: " << std::max(std::abs(*min), std::abs(*max)) << std::endl << std::endl;
+  std::cout << "max error: " << std::max(std::abs(*min), std::abs(*max)) << std::endl;
 }
 
 
