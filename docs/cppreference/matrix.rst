@@ -165,3 +165,53 @@ The source code for this can be found in src/fastmult.hpp, with tests in tests/t
 By constrast, multcachy lacks parallelization and multmatmat also lacks caching.
 They are experimental predecessors in an evolution towards multparallel.
 multparallel_timed does the same as multparallel and additionally creates a pajéfile of the multiplication run.
+
+
+MatrixExpr
+----------
+
+.. code-block:: C++
+
+    z = (X*Y + 3*Y + X)*a
+
+Matrix expressions provide a powerful mechanism for composing complex operations on matrices. These enable concise and efficient representation of mathematical operations involving matrices.
+
+It is composed of three primary types: SumMatrixExpr, ProdMatrixExpr, and ProdScalMatExpr, which represent addition, matrix multiplication, and scalar multiplication, respectively.
+
+Addition (SumMatrixExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Element-wise addition of two matrices. It ensures that the matrices being added have compatible dimensions.
+
+.. cpp:function:: template <typename TA, typename TB> \
+    auto operator+ (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
+
+Multiplication (ProdMatrixExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Matrix multiplication. It ensures that the number of columns in the first matrix matches the number of rows in the second matrix.
+
+.. cpp:function:: template <typename TA, typename TB> \
+    auto operator* (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
+
+Scalar Multiplication (ProdScalMatExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Multiplication of a matrix by a scalar. It allows scaling each element of the matrix by the specified scalar.
+
+.. cpp:function:: template <typename TSCAL, typename TMAT> \
+    auto operator* (double scal, const MatrixExpr<TMAT> & A)
+
+Matrix-Vector Product (ProdMatVecExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Multiplication of a matrix by a vector. It ensures that the number of columns in the matrix matches the size of the vector.
+
+.. cpp:function:: template <typename TA, typename TB> \
+    auto operator* (const MatrixExpr<TA> & A, const VectorExpr<TB> & b)
+
+These expressions enhance the expressiveness and efficiency of matrix computations.
+
+
+
+
