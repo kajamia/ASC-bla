@@ -263,16 +263,43 @@ void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, Mat
   BH bh;
   BW bw;
 
-  if constexpr (TIMED) timeline = std::make_unique<TimeLine>("fastmult.trace");
+  if constexpr (TIMED)
+    timeline = std::make_unique<TimeLine>("fastmult.trace");
 
   // as many workers as threads supported by your machine, minus one
   StartWorkers(std::thread::hardware_concurrency() - 1);
 
-  RunParallel((A.height()/bh) + 1, [&](int i0, int s){
-    std::mutex linemutex; // prevents race condition in kernel
+  RunParallel((A.height()/bh) + 1, [&](int i0, int s){    
+    std::mutex linemutex; // prevents race condition in kernel and memA
     alignas (64) double memA[bh*bw]; // if larger lines are locked, not that much allocation is necessary
 
     RunParallel((A.width()/bw) + 1, [&](int j0, int s2){
+      if (true) {
+        static Timer t("multblock", {1,0,0});
+        RegionTimer reg(t);
+      }
+      
+      // indices for the block matrices
+      size_t i1 = i0*bh;
+      size_t j1 = j0*bw;
+      size_t i2 = std::min(A.height(), i1+bh);
+      size_t j2 = std::min(A.width(), j1+bw);
+
+      MatrixView Ablock(i2-i1, j2-j1, bw, memA);
+
+      std::lock_guard<std::mutex> lock(linemutex); // lock
+
+      Ablock = A.Rows(i1,i2-i1).Cols(j1,j2-j1);
+      
+      blockmultcachy (C.Rows(i1, i2-i1), Ablock, B.Rows(j1, j2-j1));
+    });
+  });
+
+  /* for (size_t i0=0; i0 < (A.height()/bh) + 1; i0++){
+    std::mutex linemutex; // prevents race condition in kernel
+    alignas (64) double memA[bh*bw]; // if larger lines are locked, not that much allocation is necessary
+
+    for (size_t j0=0; j0 < (A.width()/bw) + 1; j0++){
       if constexpr (TIMED){
         static Timer t("multblock", {1,0,0});
         RegionTimer reg(t);
@@ -290,8 +317,8 @@ void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, Mat
       std::lock_guard<std::mutex> lock(linemutex); // lock
 
       blockmultcachy (C.Rows(i1, i2-i1), Ablock, B.Rows(j1, j2-j1));
-    });
-  });
+    }
+  } */
 
   StopWorkers();
 }
