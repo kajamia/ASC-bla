@@ -176,7 +176,7 @@ MatrixExpr
 
 Matrix expressions provide a powerful mechanism for composing complex operations on matrices. These enable concise and efficient representation of mathematical operations involving matrices.
 
-It is composed of three primary types: SumMatrixExpr, ProdMatrixExpr, and ProdScalMatExpr, which represent addition, matrix multiplication, and scalar multiplication, respectively.
+It is composed of four primary types: SumMatrixExpr, ProdMatrixExpr, ProdScalMatExpr and ProdMatVecExpr which represent addition, matrix multiplication, scalar multiplication and vector-matrix multiplikation, respectively.
 
 Addition (SumMatrixExpr)
 ~~~~~~~~~~~~~~~~~~~~~~~~
