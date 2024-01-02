@@ -121,55 +121,6 @@ void multmatmat(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, Matri
 
 // CACHING ---------------------------------------------------------------------
 
-/* 
-// same as multmatmat, but with caching
-// BH and BW are the height and width of the matrix block that is supposed to stay in memory,
-// they can be adjusted to fit the cache size (96 makes blocks of A fit into L2-Cache)
-template <ORDERING ORD, typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96> >
-void multcachy(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, MatrixView<double, RowMajor> B)
-{
-  // BH and BW are the height and width of the matrix block that is supposed to stay in memory,
-  // they can be adjusted to fit the cache size (96 makes blocks of A fit into L2-Cache)
-  constexpr size_t BH=96;
-  constexpr size_t BW=96;
-  BH bh;
-  BW bw;
-
-  size_t m = A.height();
-  size_t n = A.width();
-
-  // how many full blocks (96x96 within A) can we cram in?
-  size_t fullblocks_height = (m - (m % bh)) / bh;
-  size_t fullblocks_width = (n - (n % bw)) / bw;
-
-  for (size_t i=0; i < fullblocks_height; i++)
-  {
-    for (size_t j=0; j < fullblocks_width; j++)
-    {
-      multmatmat(C.Rows(i*bh, bh), A.Rows(i*bh, bh).Cols(j*bw, bw), B.Rows(j*bw, bw));
-    }
-  }
-
-  // cleanup
-
-  for (size_t i=0; i < fullblocks_height; i++)
-  {
-    multmatmat(C.Rows(i*bh, bh), A.Rows(i*bh, bh).Cols((fullblocks_width + 1)*bw, n%bw), B.Rows((fullblocks_width + 1)*bw, n%bw));
-  }
-
-  for (size_t j=0; j < fullblocks_width; j++)
-  {
-    multmatmat(C.Rows((fullblocks_height + 1)*bh, n%bh), A.Rows((fullblocks_height + 1)*bh, n%bh).Cols(j*bw, bw), B.Rows(j*bw, bw));
-  }
-
-  if ((m % bh) != 0 && (m % bw) != 0)
-  {
-    multmatmat(C.Rows((fullblocks_height + 1)*bh, n%bh), A.Rows((fullblocks_height + 1)*bh, n%bh).Cols((fullblocks_width + 1)*bw, n%bw), B.Rows((fullblocks_width + 1)*bw, n%bw));
-  }
-}
- */
-
-
 // computes the product for a block that can be filled with 4x12 matrices
 // helper function for multcachy
 template <ORDERING ORD, typename H = std::integral_constant<size_t, 4>, typename W = std::integral_constant<size_t, 12> >
@@ -228,43 +179,13 @@ void multcachy(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, Matrix
 
 // PARALLELIZATION -------------------------------------------------------------
 
-/* template <ORDERING ORD, typename H = std::integral_constant<size_t, 4>, typename W = std::integral_constant<size_t, 12> >
-void blockmultparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, MatrixView<double, RowMajor> B)
-{
-  W w;
-  H h;
-
-  for (size_t j=0; j+w <= C.width(); j += w)
-  {
-    for (size_t i=0; i+h <= C.height(); i += h)
-    {
-      multkernel(C.Rows(i, h).Cols(j, w), A.Rows(i, h), B.Cols(j, w));
-    }
-  }
-
-  // cleanup
-
-  for (size_t i=0; i+h <= C.height(); i += h)
-    smallblock(C.Rows(i, h).Cols(C.width() - C.width()%w, C.width()%w), A.Rows(i, h), B.Cols(C.width() - C.width()%w, C.width()%w));
-
-  for (size_t j=0; j+w <= C.width(); j += w)
-    smallblock(C.Rows(C.height() - C.height()%h, C.height()%h).Cols(j, w), A.Rows(C.height() - C.height()%h, C.height()%h), B.Cols(j, w));
-  
-  if ((C.height() % h) != 0 && (C.width() % w) != 0)
-    smallblock(C.Rows(C.height() - C.height()%h, C.height()%h).Cols(C.width() - C.width()%w, C.width()%w), A.Rows(C.height() - C.height()%h, C.height()%h), B.Cols(C.width() - C.width()%w, C.width()%w));
-} */
-
 // the most powerful function
 // the same as multcachy, but with threads instead of loops
-// if TIMED is set to true, timing stats will be created
-template <bool TIMED = false, typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96>, ORDERING ORD>
+template <typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96>, ORDERING ORD>
 void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, MatrixView<double, RowMajor> B)
 {
   BH bh;
   BW bw;
-
-  if constexpr (TIMED)
-    timeline = std::make_unique<TimeLine>("fastmult.trace");
 
   // as many workers as threads supported by your machine, minus one
   StartWorkers(std::thread::hardware_concurrency() - 1);
@@ -274,10 +195,6 @@ void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, Mat
     alignas (64) double memA[bh*bw]; // if larger lines are locked, not that much allocation is necessary
 
     RunParallel((A.width()/bw) + 1, [&](int j0, int s2){
-      if (true) {
-        static Timer t("multblock", {1,0,0});
-        RegionTimer reg(t);
-      }
       
       // indices for the block matrices
       size_t i1 = i0*bh;
@@ -295,16 +212,29 @@ void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, Mat
     });
   });
 
-  /* for (size_t i0=0; i0 < (A.height()/bh) + 1; i0++){
-    std::mutex linemutex; // prevents race condition in kernel
+  StopWorkers();
+}
+
+// a variant of multparallel that creates performance statistics
+template <typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96>, ORDERING ORD>
+void multparallel_timed(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, MatrixView<double, RowMajor> B)
+{
+  BH bh;
+  BW bw;
+
+  timeline = std::make_unique<TimeLine>("fastmult.trace");
+  static Timer t("fastmult", {1, 0, 0});
+
+  // as many workers as threads supported by your machine, minus one
+  StartWorkers(std::thread::hardware_concurrency() - 1);
+
+  RunParallel((A.height()/bh) + 1, [&](int i0, int s){    
+    std::mutex linemutex; // prevents race condition in kernel and memA
     alignas (64) double memA[bh*bw]; // if larger lines are locked, not that much allocation is necessary
 
-    for (size_t j0=0; j0 < (A.width()/bw) + 1; j0++){
-      if constexpr (TIMED){
-        static Timer t("multblock", {1,0,0});
-        RegionTimer reg(t);
-      }
-
+    RunParallel((A.width()/bw) + 1, [&](int j0, int s2){
+      RegionTimer reg(t);
+      
       // indices for the block matrices
       size_t i1 = i0*bh;
       size_t j1 = j0*bw;
@@ -312,13 +242,14 @@ void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, Mat
       size_t j2 = std::min(A.width(), j1+bw);
 
       MatrixView Ablock(i2-i1, j2-j1, bw, memA);
-      Ablock = A.Rows(i1,i2-i1).Cols(j1,j2-j1);
-      
+
       std::lock_guard<std::mutex> lock(linemutex); // lock
 
+      Ablock = A.Rows(i1,i2-i1).Cols(j1,j2-j1);
+      
       blockmultcachy (C.Rows(i1, i2-i1), Ablock, B.Rows(j1, j2-j1));
-    }
-  } */
+    });
+  });
 
   StopWorkers();
 }

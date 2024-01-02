@@ -148,15 +148,15 @@ Fast matrix multiplication
 The Neo-CLA library comprises functionality to compute matrix products more quickly.
 The source code for this can be found in src/fastmult.hpp, with tests in tests/test_fastmult.cc.
 
-.. cpp:function:: template <bool TIMED = false, typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96>, ORDERING ORD> \
+.. cpp:function:: template <typename BH = std::integral_constant<size_t, 96>, typename BW = std::integral_constant<size_t, 96>, ORDERING ORD> \
     void multparallel(MatrixView<double, RowMajor> C, MatrixView<double, ORD> A, MatrixView<double, RowMajor> B)
 
     This is the most important function of this chapter. It computes A*B and **adds** the product to C.
-    TIMED specifies whether or not a pajéfile shall be created to log the timing of different tasks.
     BH and BW specify the height and width of the blocks of A that are extracted for blockwise multiplication.
     Adjusting these two parameters helps parts of A and B stay in Cache, see `the theory <https://jschoeberl.github.io/IntroSC/performance/caches1.html#cache-optimized-matrix-matrix-multiplication>`_.
     multparallel takes advantage of **SIMD, pipelining, caching and parallelization**.
     Note the restrictions on the Matrix ordering! Computing the product might require transposing a few matrices.
+    The performance of multparallel can be tested by running test_fastmult.
 
     .. code-block:: C++
 
@@ -164,3 +164,4 @@ The source code for this can be found in src/fastmult.hpp, with tests in tests/t
 
 By constrast, multcachy lacks parallelization and multmatmat also lacks caching.
 They are experimental predecessors in an evolution towards multparallel.
+multparallel_timed does the same as multparallel and additionally creates a pajéfile of the multiplication run.

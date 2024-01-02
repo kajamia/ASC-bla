@@ -68,7 +68,7 @@ void performance_test(){
 
   auto start = std::chrono::high_resolution_clock::now();
 
-  multparallel<true>(C, A, B); // the computation
+  multparallel_timed(C, A, B); // the computation
   
   auto end = std::chrono::high_resolution_clock::now();
   double time = std::chrono::duration<double>(end-start).count();
