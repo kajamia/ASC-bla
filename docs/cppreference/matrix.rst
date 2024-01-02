@@ -178,6 +178,7 @@ Matrix expressions provide a powerful mechanism for composing complex operations
 It is composed of three primary types: SumMatrixExpr, ProdMatrixExpr, and ProdScalMatExpr, which represent addition, matrix multiplication, and scalar multiplication, respectively.
 
 Addition (SumMatrixExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Element-wise addition of two matrices. It ensures that the matrices being added have compatible dimensions.
 
@@ -185,6 +186,7 @@ Element-wise addition of two matrices. It ensures that the matrices being added 
     auto operator+ (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
 
 Multiplication (ProdMatrixExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Matrix multiplication. It ensures that the number of columns in the first matrix matches the number of rows in the second matrix.
 
@@ -192,6 +194,7 @@ Matrix multiplication. It ensures that the number of columns in the first matrix
     auto operator* (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
 
 Scalar Multiplication (ProdScalMatExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Multiplication of a matrix by a scalar. It allows scaling each element of the matrix by the specified scalar.
 
@@ -199,6 +202,7 @@ Multiplication of a matrix by a scalar. It allows scaling each element of the ma
     auto operator* (double scal, const MatrixExpr<TMAT> & A)
 
 Matrix-Vector Product (ProdMatVecExpr)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Multiplication of a matrix by a vector. It ensures that the number of columns in the matrix matches the size of the vector.
 
