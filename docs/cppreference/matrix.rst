@@ -169,6 +169,10 @@ They are experimental predecessors in an evolution towards multparallel.
 MatrixExpr
 ----------
 
+.. code-block:: C++
+
+    z = (X*Y + 3*Y + X)*a
+
 Matrix expressions provide a powerful mechanism for composing complex operations on matrices. These enable concise and efficient representation of mathematical operations involving matrices.
 
 It is composed of three primary types: SumMatrixExpr, ProdMatrixExpr, and ProdScalMatExpr, which represent addition, matrix multiplication, and scalar multiplication, respectively.
@@ -202,4 +206,7 @@ Multiplication of a matrix by a vector. It ensures that the number of columns in
     auto operator* (const MatrixExpr<TA> & A, const VectorExpr<TB> & b)
 
 These expressions enhance the expressiveness and efficiency of matrix computations.
+
+
+
 
