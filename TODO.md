@@ -23,7 +23,7 @@ This is a file to keep track of homeworks and progress.
 - [X] (Norbert) dividieren für simd
 - [X] test added arithmetic operations
 - [X] (Norbert) SIMD<double,2> class machen
-- [ ] (Norbert) fast matrix multiplication :rocket:
+- [X] (Norbert) fast matrix multiplication :rocket:
 
 ### Until 7.12.
 - [X] initializer list constructor for Vector
@@ -38,7 +38,7 @@ This is a file to keep track of homeworks and progress.
 ### Until 14.12.
 - [ ] Runge-Kutta (ist bei Schöberl auf einem Branch)
 - [X] important: fix test_alpha, test_newmark
-- [ ] fix everything in the folder mass_spring
+- [X] fix everything in the folder mass_spring
 - [X] rename VecExpr to VectorExpr
 
 ### Until 11.01.

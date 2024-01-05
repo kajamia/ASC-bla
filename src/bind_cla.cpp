@@ -6,13 +6,8 @@
 #include "matrix.h"
 #include "lapack_interface.h"
 
-// using namespace Neo_CLA;
-using Neo_CLA::Vector;
-using Neo_CLA::Matrix;
-using Neo_CLA::LapackLU;
-using Neo_CLA::RowMajor;
+using namespace Neo_CLA;
 namespace py = pybind11;
-
 
 
 
@@ -165,9 +160,9 @@ PYBIND11_MODULE(cla, m) {
 
 
 
-  // LapackLU class
+    // LapackLU class
     py::class_<LapackLU<RowMajor> > (m, "LapackLU")
-    .def(py::init<Matrix<double,RowMajor>>(), "create new LapackLU object")
-    .def("Solve", &LapackLU<RowMajor>::Solve, py::arg("b"));
+      /* .def(py::init<Matrix<double,RowMajor>>(), "create new LapackLU object")
+      .def("Solve", &LapackLU<RowMajor>::Solve, py::arg("b")) */;
 
 }

@@ -3,18 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Hey! Welcome to Neo-CLA's documentation!
-========================================
+Welcome to Neo-CLA's documentation!
+===================================
 
-Neo-cla is a C++ library for basic linear algebra (bla) operations.
+Neo-cla is a C++ and Python library for basic linear algebra (bla) operations.
 It is a fork of `ASC-bla <https://github.com/TUWien-ASC/ASC-bla>`_.
-Thus, it provides its contents within the **Neo_CLA** namespace.
+For C++, its contents are provided within the **Neo_CLA** namespace.
 
 Neo-CLA gives you:
  - Matrix and vector operations (fast C++)
  - A Python interface for simple yet performant code
  - An interface to Lapack for more performance
- - The custom high-performance submodule `Neo-CLA-HPC <https://github.com/kajamia/Neo-CLA-HPC>`_
+ - A homemade fast matrix multiplication function
+ - The submodule `Neo-CLA-HPC <https://github.com/kajamia/Neo-CLA-HPC>`_ provides functionality for high-performance computing.
 
 
 You can create vectors and compute with vectors like:
@@ -30,7 +31,7 @@ You can create vectors and compute with vectors like:
 
 
 For matrices you can choose between row-major (`RowMajor`) or column-major (`ColMajor`) storage,
-default is row-major, with all entries of type double.
+default is row-major, with entries of type double.
 
 ..  code-block:: cpp
 
@@ -41,12 +42,13 @@ default is row-major, with all entries of type double.
    m2 = 3.7;
    Matrix product = m1 * m2;
    
-You can extract a rows or a columns from a matrix:
+You can extract a row or a column from a matrix:
 
 ..  code-block:: cpp
 
    Vector col1 = product.Col(1);
 
+and so much more...
 
 
    
@@ -59,6 +61,7 @@ You can extract a rows or a columns from a matrix:
    pyreference
    cppreference/index
    neohpc/index
+   neoode/index
 
 
 Indices and tables

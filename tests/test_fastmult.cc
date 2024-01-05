@@ -4,7 +4,7 @@
 #include <iostream>
 #include <ostream>
 
-#include "fastmult.hpp"
+#include "fastmult.h"
 #include "matrix.h"
 
 

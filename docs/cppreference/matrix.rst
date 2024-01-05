@@ -166,6 +166,11 @@ By constrast, multcachy lacks parallelization and multmatmat also lacks caching.
 They are experimental predecessors in an evolution towards multparallel.
 multparallel_timed does the same as multparallel and additionally creates a pajéfile of the multiplication run.
 
+.. admonition:: Error handling
+    :class: warning
+
+    Please note that for performance reasons, these functions do not provide error handling on matrix dimensions.
+
 
 MatrixExpr
 ----------
