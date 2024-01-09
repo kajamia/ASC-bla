@@ -111,8 +111,8 @@ namespace Neo_CLA
     MultMatMatLapack (b.transposed(), a.transposed(), c.transposed());
   }
 
-  class T_Lapack { };
-  static constexpr T_Lapack Lapack;
+  /* class T_Lapack { };
+  static constexpr T_Lapack Lapack; */
 
   // | operator overload
 

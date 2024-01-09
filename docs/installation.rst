@@ -18,7 +18,7 @@ Requirements
     Python Installation
     -------------------
 
-    To install, use:
+    To install just the Python part, use:
 
     .. code-block::
 
@@ -62,11 +62,11 @@ To compile for python:
 Usage: Python
 -------------
 
-ASCsoft.bla exposes the the classes Vector and Matrix:
+Neosoft.cla exposes the the classes Vector and Matrix:
 
 .. code-block:: python
 
-    from ASCsoft.bla import Matrix, Vector
+    from Neosoft.cla import Matrix, Vector
     
 
 Usage: C++
@@ -78,16 +78,18 @@ To use Neo-CLA in your code, set the compiler include path properly, and include
 
     #include <vector.h>
     #include <matrix.h>
+    #include <lapack_interface.h>
+    #include <fastmult.h>
 
-All objects are implemented in the namespace ASC_bla. To use them with less typing, you can set
+All objects are implemented in the namespace Neo_CLA. To use them with less typing, you can set
 
 ..  code-block:: cpp
     
-    namespace bla = ASC_bla;
+    namespace cla = Neo_CLA;
 
 or even
 
 ..  code-block:: cpp
     
-    using namespace ASC_bla;
+    using namespace Neo_CLA;
 

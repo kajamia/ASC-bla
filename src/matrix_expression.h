@@ -43,6 +43,12 @@ auto operator+ (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
   return SumMatrixExpr(A.Upcast(), B.Upcast());
 }
 
+template <typename TA, typename TB>
+auto operator- (const MatrixExpr<TA> & A, const MatrixExpr<TB> & B)
+{
+  return SumMatrixExpr(A.Upcast(), (-1)*B.Upcast());
+}
+
 //Multiplikation
 template <typename TA, typename TB>
 class ProdMatrixExpr : public MatrixExpr<ProdMatrixExpr<TA,TB> >

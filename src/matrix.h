@@ -4,6 +4,7 @@
 #include <iostream>
 #include <initializer_list>
 #include <exception>
+#include <random>
 
 #include "forward_decl.h"
 #include "vector.h"
@@ -207,20 +208,20 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     if (start > stop){ throw std::out_of_range("row start index too large")};
     if (stop >= width()){ throw std::out_of_range("row stop index out of range")}; */
     if constexpr (ORD == RowMajor){
-      return MatrixView<T, ORD> (height, width_, dist_, (data_ + start*width_));
+      return MatrixView<T, ORD> (height, width_, dist_, (data_ + start*dist_));
     }
     else{
-      return MatrixView<T, ORD> (height, width_, height_, (data_ + start));
+      return MatrixView<T, ORD> (height, width_, dist_, (data_ + start));
     }
   }
 
   // returns the submatrix from column start with given width
   MatrixView<T, ORD> Cols(size_t start, size_t width){
     if constexpr (ORD == RowMajor){
-      return MatrixView<T, ORD> (height_, width, width_, (data_ + start));
+      return MatrixView<T, ORD> (height_, width, dist_, (data_ + start));
     }
     else{
-      return MatrixView<T, ORD> (height_, width, dist_, (data_ + start*height_));
+      return MatrixView<T, ORD> (height_, width, dist_, (data_ + start*dist_));
     }
   }
 
@@ -343,6 +344,27 @@ class Matrix : public MatrixView<T, ORD> {
   }
 
 };
+
+
+// for testing purposes
+template<ORDERING ORD = RowMajor>
+Matrix<double, ORD> randommatrix (size_t height, size_t width, int lbound = 0, int hbound = 100)
+{
+  Matrix<double, ORD> A(height, width);
+
+  std::uniform_real_distribution<double> unif(lbound, hbound);
+  std::default_random_engine re;
+
+  for (size_t i=0; i < A.height(); i++)
+  {
+    for (size_t j=0; j < A.width(); j++)
+    {
+      A(i, j) = unif(re);
+    }
+  }
+
+  return A;
+}
 
 
 template <typename T, ORDERING ORD>

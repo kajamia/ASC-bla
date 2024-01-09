@@ -8,7 +8,11 @@ namespace Neo_CLA
   template <typename T>
   class VectorExpr
   {
-  public:
+   protected:
+    // the following two are to prevent copying of VectorExpr-objects
+    VectorExpr() = default;
+    VectorExpr(const VectorExpr & v) = default;
+   public:
     auto Upcast() const { return static_cast<const T&> (*this); }
     size_t Size() const { return Upcast().Size(); }
     auto operator() (size_t i) const { return Upcast()(i); }
@@ -88,7 +92,7 @@ namespace Neo_CLA
 
   // scalar product
   template <typename T1, typename T2>
-  auto operator* (VectorExpr<T1> v1, VectorExpr<T2> v2){
+  auto operator* (const VectorExpr<T1> & v1, const VectorExpr<T2> & v2){
     // error handling
     if (v1.Size() != v2.Size()){
       throw std::invalid_argument("vectors need to have same length for scalar product");
@@ -105,7 +109,7 @@ namespace Neo_CLA
 
   // 2-norm for vectors
   template <typename T>
-  auto L2Norm (VectorExpr<T> v){
+  auto L2Norm (const VectorExpr<T> & v){
     return std::sqrt(v*v);
   }
   

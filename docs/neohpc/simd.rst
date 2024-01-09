@@ -178,3 +178,11 @@ Examples:
 
     SIMD<double, 4> c = 3 * a;
     SIMD<double, 4> d = a/b;
+
+The output:
+
+.. code-block::
+
+    0.5, 1.5, 6.28, 127.273
+    1.5, 1.5, 6, 9.09091
+    1.41421, 1.41421, 0.707107, 0.574456

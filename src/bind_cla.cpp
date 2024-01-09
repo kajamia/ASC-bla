@@ -12,13 +12,13 @@ namespace py = pybind11;
 
 
 
-
 PYBIND11_MODULE(cla, m) {
     m.doc() = "Basic linear algebra module"; // optional module docstring
     
     py::class_<Vector<double>> (m, "Vector", py::buffer_protocol())
       .def(py::init<size_t>(),
            py::arg("size"), "create vector of given size")
+
       .def("__len__", &Vector<double>::Size,
            "return size of vector")
       
@@ -171,6 +171,7 @@ PYBIND11_MODULE(cla, m) {
 
 
 
+<<<<<<< HEAD
   // LapackLU class
   //bei der dokumentation -->> neuen List constructor erwähnen!!!!!!!!!!!!!!!!!!!!!!!!
     py::class_<LapackLU<RowMajor>> (m, "LapackLU")
@@ -181,4 +182,11 @@ PYBIND11_MODULE(cla, m) {
     .def("UFactor", [](LapackLU<RowMajor> & self){return (Matrix<double,RowMajor>) self.UFactor();})
     .def("PFactor", [](LapackLU<RowMajor> & self){return (Matrix<double,RowMajor>) self.PFactor();})
   ;
+=======
+    // LapackLU class
+    py::class_<LapackLU<RowMajor> > (m, "LapackLU")
+      /* .def(py::init<Matrix<double,RowMajor>>(), "create new LapackLU object")
+      .def("Solve", &LapackLU<RowMajor>::Solve, py::arg("b")) */;
+
+>>>>>>> 50781fdf8861cd422bd0429338cd3376550f054a
 }
