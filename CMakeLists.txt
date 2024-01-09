@@ -36,6 +36,7 @@ target_link_libraries (test_lapack PUBLIC LAPACK::LAPACK)
 add_executable(test_fastmult tests/test_fastmult.cc)
 
 pybind11_add_module(cla src/bind_cla.cpp)
+target_link_libraries (cla PUBLIC LAPACK::LAPACK)
 
 install (TARGETS cla DESTINATION Neosoft)
 install (FILES src/matrix.h DESTINATION Neosoft/include)
