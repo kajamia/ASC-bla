@@ -1,9 +1,13 @@
 #include <sstream>
 #include <chrono>
 #include <pybind11/pybind11.h>
+#include <pybind11/eigen.h>
+#include <Eigen/Core>
 
 #include "vector.h"
 #include "matrix.h"
+#include "lapack_interface.h"
+
 
 using namespace Neo_CLA;
 namespace py = pybind11;
@@ -158,10 +162,35 @@ PYBIND11_MODULE(cla, m) {
     ;
 
 
-
+/*
   // LapackLU class
-    py::class_<LapackLU> (m, "LapackLU")
+    template <Neo_CLA::ORDERING ORD>
+    class LapackLU {
+    py::class_<LapackLU<double> > (m, "LapackLU". py::buffer_protocol())
     .def(py::init<Matrix<double,RowMajor>>(), "create new LapackLU object")
     .def("Solve", &LapackLU::Solve, py::arg("b"))
 
+}
+*/
+
+// LapackLU class
+template <Neo_CLA::ORDERING ORD>
+class LapackLU {
+public:
+    LapackLU(const Matrix<double, RowMajor>& inputMatrix) {
+        // Constructor implementation
+    }
+
+    // Example Solve function (missing actual implementation)
+    VectorXd Solve(const VectorXd& b) const {
+        // Solve implementation
+        return VectorXd();
+    }
+};
+
+// Pybind11 bindings
+PYBIND11_MODULE(cla, m) {
+    py::class_<LapackLU<Neo_CLA::ORDERING>>(m, "LapackLU", py::buffer_protocol())
+        .def(py::init<const Matrix<double, RowMajor>&>(), "create new LapackLU object")
+        .def("Solve", &LapackLU<Neo_CLA::ORDERING>::Solve, py::arg("b"));
 }
