@@ -77,6 +77,8 @@ void performance_test(){
   double GFlops = (n*n*(n - 1))/(time*1e9);
   std::cout << "n = " << n << ", time = " << time << " s, GFlops = " << GFlops << std::endl;
 
+  if (GFlops <= 4) std::cout << "Not enough performance? Do not forget to compile with cmake \"-DCMAKE_BUILD_TYPE=Release ..\"!" << std::endl;
+
   // is the result correct? if yes, all values of C - A*B lie around 0
   Matrix D = C - A*B;
   const auto [min, max] = std::minmax_element(D.Data(), D.Data() + D.height()*D.width());

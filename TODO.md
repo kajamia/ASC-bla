@@ -32,7 +32,7 @@ This is a file to keep track of homeworks and progress.
 - [X] Explicit Euler
 - [X] Crank-Nicholson
 - [X] Visualisation
-- [ ] electric network simulation
+- [X] electric network simulation
 - [X] rename namespace
 
 ### Until 14.12.
