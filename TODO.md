@@ -46,6 +46,7 @@ This is a file to keep track of homeworks and progress.
 - [ ] 18.4.2
 
 ### Until 18.01.
+all of the above
 
 
 - [ ] (all) continue documentation 

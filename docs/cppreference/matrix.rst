@@ -216,7 +216,3 @@ Multiplication of a matrix by a vector. It ensures that the number of columns in
     auto operator* (const MatrixExpr<TA> & A, const VectorExpr<TB> & b)
 
 These expressions enhance the expressiveness and efficiency of matrix computations.
-
-
-
-

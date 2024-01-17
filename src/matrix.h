@@ -60,6 +60,26 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
     return *this;
   }
 
+  MatrixView & operator= (std::initializer_list<T> list)
+  {
+    if (list.size() != width_*height_){
+      throw std::invalid_argument("initializer list does not have right length for matrix shape");
+      return *this;
+    }
+    else{
+      for (size_t i = 0; i < height_; i++) {
+        for (size_t j = 0; j < width_; j++) {
+          if constexpr (ORD == RowMajor) {
+            data_[dist_ * i + j] = list.begin()[width_*i + j];
+          } else {
+            data_[dist_ * j + i] = list.begin()[width_*i + j];
+          }
+        }
+      }
+    }
+    return *this;
+  }
+
   // operator +=
   template <typename TB>
   MatrixView &operator+=(const MatrixExpr<TB> & M) {

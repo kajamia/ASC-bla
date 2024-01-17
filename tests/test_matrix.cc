@@ -48,9 +48,12 @@ void misc_tests(){
                                15, 16, 17, 18, 19, 20, 21,
                                22, 23, 24, 25, 26, 27, 28});
   
-  std::cout << "Diag of F=" << F.Diag() << std::endl;
+  E.Rows(1, 3).Cols(3, 3) = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+  std::cout << E << std::endl;
+  // std::cout << "Diag of F=" << F.Diag() << std::endl;
 
-  std::cout << E.Rows(1, 2).Cols(3, 3).Rows(0, 2).Cols(0, 2) << std::endl;
+  // std::cout << E.Rows(1, 2).Cols(3, 3).Rows(0, 2).Cols(0, 2) << std::endl;
+
 
 /*   for (size_t i=0; i < E.height(); i++){
     std::cout << E.Row(i) << std::endl;
@@ -79,7 +82,7 @@ void misc_tests(){
 
   std::cout << E << std::endl; */
 
-  A+E;
+  // A+E;
 
 }
 
