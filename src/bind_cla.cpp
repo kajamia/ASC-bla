@@ -1,8 +1,8 @@
 #include <sstream>
 #include <chrono>
 #include <pybind11/pybind11.h>
-#include <pybind11/eigen.h>
-#include <Eigen/Core>
+// #include <pybind11/eigen.h>
+// #include <Eigen/Core>
 #include <pybind11/stl.h>
 
 #include "vector.h"
@@ -187,7 +187,7 @@ PYBIND11_MODULE(cla, m) {
 }
 */
 
-// LapackLU class
+/* // LapackLU class
 template <Neo_CLA::ORDERING ORD>
 class LapackLU {
 public:
@@ -200,11 +200,11 @@ public:
         // Solve implementation
         return VectorXd();
     }
-};
+}; */
 
-// Pybind11 bindings
+/* // Pybind11 bindings
 PYBIND11_MODULE(cla, m) {
     py::class_<LapackLU<Neo_CLA::ORDERING>>(m, "LapackLU", py::buffer_protocol())
         .def(py::init<const Matrix<double, RowMajor>&>(), "create new LapackLU object")
-        .def("Solve", &LapackLU<Neo_CLA::ORDERING>::Solve, py::arg("b"));
+        .def("Solve", &LapackLU<Neo_CLA::ORDERING>::Solve, py::arg("b")); */
 }
