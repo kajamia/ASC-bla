@@ -50,6 +50,8 @@ void misc_tests(){
   
   std::cout << "Diag of F=" << F.Diag() << std::endl;
 
+  std::cout << E.Rows(1, 2).Cols(3, 3).Rows(0, 2).Cols(0, 2) << std::endl;
+
 /*   for (size_t i=0; i < E.height(); i++){
     std::cout << E.Row(i) << std::endl;
   }

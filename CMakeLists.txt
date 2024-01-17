@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.20)
 project(Neo_CLA)
 
 set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 include_directories(src)
 include_directories(external_dependencies/HPC/src)
+include_directories(external_dependencies/HPC/concurrentqueue)
 
 find_package(Python 3.8 COMPONENTS Interpreter Development REQUIRED)
 
@@ -36,6 +38,7 @@ target_link_libraries (test_lapack PUBLIC LAPACK::LAPACK)
 add_executable(test_fastmult tests/test_fastmult.cc)
 
 pybind11_add_module(cla src/bind_cla.cpp)
+target_link_libraries (cla PUBLIC LAPACK::LAPACK)
 
 install (TARGETS cla DESTINATION Neosoft)
 install (FILES src/matrix.h DESTINATION Neosoft/include)

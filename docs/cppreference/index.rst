@@ -14,3 +14,4 @@ The core part of the project.
 
     matrix
     vector
+    lapack

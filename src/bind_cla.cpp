@@ -3,6 +3,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include <Eigen/Core>
+#include <pybind11/stl.h>
 
 #include "vector.h"
 #include "matrix.h"
@@ -14,13 +15,13 @@ namespace py = pybind11;
 
 
 
-
 PYBIND11_MODULE(cla, m) {
     m.doc() = "Basic linear algebra module"; // optional module docstring
     
     py::class_<Vector<double>> (m, "Vector", py::buffer_protocol())
       .def(py::init<size_t>(),
            py::arg("size"), "create vector of given size")
+
       .def("__len__", &Vector<double>::Size,
            "return size of vector")
       
@@ -84,6 +85,16 @@ PYBIND11_MODULE(cla, m) {
     py::class_<Matrix<double> > (m, "Matrix", py::buffer_protocol())
       .def(py::init<size_t, size_t>(),
         py::arg("height"), py::arg("width"), "create empty matrix")
+      //list constructor
+      .def(py::init([](size_t m, size_t n, std::vector<double> d){
+        Matrix A(m,n);
+        for (size_t i=0; i<m; i++){
+          for (size_t j=0; j<n; j++){
+            A(i,j) = d[i*n+j];
+          }
+        }
+        return A;
+      }))
       .def("__getitem__",
         [](Matrix<double>& self, std::tuple<int, int> ind) {
           return self(std::get<0>(ind), std::get<1>(ind));
@@ -164,12 +175,15 @@ PYBIND11_MODULE(cla, m) {
 
 /*
   // LapackLU class
-    template <Neo_CLA::ORDERING ORD>
-    class LapackLU {
-    py::class_<LapackLU<double> > (m, "LapackLU". py::buffer_protocol())
+  //bei der dokumentation -->> neuen List constructor erwähnen!!!!!!!!!!!!!!!!!!!!!!!!
+    py::class_<LapackLU<RowMajor>> (m, "LapackLU")
     .def(py::init<Matrix<double,RowMajor>>(), "create new LapackLU object")
-    .def("Solve", &LapackLU::Solve, py::arg("b"))
-
+    .def("Solve", [](LapackLU<RowMajor> & self, Vector<double> b){self.Solve(b);}, py::arg("b"))
+    .def("Inverse", [](LapackLU<RowMajor> & self){return (Matrix<double,RowMajor>) self.Inverse();}) 
+    .def("LFactor", [](LapackLU<RowMajor> & self){return (Matrix<double,RowMajor>) self.LFactor();})
+    .def("UFactor", [](LapackLU<RowMajor> & self){return (Matrix<double,RowMajor>) self.UFactor();})
+    .def("PFactor", [](LapackLU<RowMajor> & self){return (Matrix<double,RowMajor>) self.PFactor();})
+  ;
 }
 */
 
