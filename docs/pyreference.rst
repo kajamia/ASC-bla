@@ -58,7 +58,7 @@ LapackLU
     A LapackLU object can be constructed with the input of a Matrix object.
 
     .. code-block::
-        
+
         A = Matrix(4, 4, (6, 5, 3, -10, 
                             3, 7, -3, 5, 
                             12, 4, 4, 4, 
@@ -66,12 +66,14 @@ LapackLU
 
         B = LapackLU(A)
     
-    Using a LapackLU object, you are able to access every function of the C++ LapackLU class using the dot operator:
-    - Inverse
-    - Solve
-    - LFactor
-    - UFactor
-    - PFactor
+    Using a LapackLU object, you are able to access every function of the C++ LapackLU class using the dot operator. The following functions are available:
+        - Inverse
+        - Solve
+        - LFactor
+        - UFactor
+        - PFactor
+
+    Some examples:
 
     .. code-block::
 
