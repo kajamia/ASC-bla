@@ -175,7 +175,6 @@ PYBIND11_MODULE(cla, m) {
 
 /*
   // LapackLU class
-  //bei der dokumentation -->> neuen List constructor erwähnen!!!!!!!!!!!!!!!!!!!!!!!!
     py::class_<LapackLU<RowMajor>> (m, "LapackLU")
     .def(py::init<Matrix<double,RowMajor>>(), "create new LapackLU object")
     .def("Solve", [](LapackLU<RowMajor> & self, Vector<double> b){self.Solve(b);}, py::arg("b"))
