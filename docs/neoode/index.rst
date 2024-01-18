@@ -35,7 +35,7 @@ Functions are specified with the built-in function algebra implementation:
     func = Id + 3 * Compose (f, g);
 
 There is also an integrated plotting utility: `demos/plot_test_data.py <https://github.com/kajamia/Neo-ODE/blob/main/demos/plot_test_data.py>`_.
-It is given a command as argument, parses the output of that command as csv and plots the output (the solution function).
+It is given a command as argument, parses the output of that command as csv and plots that output (the solution function).
 
 .. code-block:: bash
 

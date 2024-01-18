@@ -48,8 +48,8 @@ void misc_tests(){
                                15, 16, 17, 18, 19, 20, 21,
                                22, 23, 24, 25, 26, 27, 28});
   
-  E.Rows(1, 3).Cols(3, 3) = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-  std::cout << E << std::endl;
+  F.Rows(3, 2).Cols(1, 2) = {0, 1, 2, 3};
+  std::cout << F << std::endl;
   // std::cout << "Diag of F=" << F.Diag() << std::endl;
 
   // std::cout << E.Rows(1, 2).Cols(3, 3).Rows(0, 2).Cols(0, 2) << std::endl;

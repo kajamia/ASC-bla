@@ -72,7 +72,7 @@ class MatrixView : public MatrixExpr<MatrixView<T, ORD> >
           if constexpr (ORD == RowMajor) {
             data_[dist_ * i + j] = list.begin()[width_*i + j];
           } else {
-            data_[dist_ * j + i] = list.begin()[width_*i + j];
+            data_[dist_ * j + i] = list.begin()[height_*j + i];
           }
         }
       }

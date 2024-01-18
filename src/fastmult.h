@@ -1,3 +1,6 @@
+#ifndef FILE_FASTMULT_H
+#define FILE_FASTMULT_H
+
 #include <algorithm>
 #include <iostream>
 #include <mutex>
@@ -256,3 +259,4 @@ void multparallel_timed(MatrixView<double, RowMajor> C, MatrixView<double, ORD> 
 
 
 } // namespace
+#endif

@@ -11,3 +11,4 @@ All kinds of geometries can be created:
 
 Fixed points are blue, point masses are red and springs are turquoise.
 These examples can be found in Jupyter notebooks within the mass_spring subdirectory.
+It all relies heavily on a pybind interface.

@@ -14,7 +14,9 @@ This is the main class of this project.
     .. cpp:function:: Matrix (size_t height, size_t width, std::initializer_list<T> list)
     
     There is one constructor that creates an empty matrix of given dimensions.
-    The initializer list constructor stores an initalizer list into a matrix.
+    The initializer list constructor stores an initalizer list into a matrix;
+    note that this copies the list into memory,
+    thus the entries of the list have to match the ordering of the Matrix.
 
     T is the data type of the elements of the matrix. You can use about any data type with Matrix.
     As for the ordering, **RowMajor** and **ColMajor** are available.
@@ -32,6 +34,12 @@ This is the main class of this project.
 
         Most of the features of Matrix are not actually provided by the Matrix class itself,
         but inherited from MatrixView and (indirectly) MatrixExpr.
+
+.. cpp:function:: template<ORDERING ORD = RowMajor> \
+    Matrix<double, ORD> randommatrix (size_t height, size_t width, int lbound = 0, int hbound = 100)
+
+    For testing purposes, one can create a matrix of dimension height and width, filled
+    with random entries in the range [lbound, hbound].
 
 
 Inverse
@@ -55,90 +63,97 @@ It provides a versatile interface for accessing and manipulating matrix data, fo
         Matrix<float, ColMajor> A(3000, 700);
         MatrixView<float, ColMajor> viewA(A.height(), A.width(), A.Data());
 
-.. cpp:function:: MatrixView(size_t height, size_t width, T *data)
+.. cpp:class:: template <typename T, ORDERING ORD> \
+    MatrixView : public MatrixExpr<MatrixView<T, ORD> >
 
-    Constructor that creates a view of a matrix given its dimensions, data pointer, and optional distance between elements.
+    .. cpp:function:: MatrixView(size_t height, size_t width, T *data)
 
-.. cpp:function:: MatrixView(size_t height, size_t width, size_t dist, T *data)
+        Constructor that creates a view of a matrix given its dimensions, data pointer, and optional distance between elements.
 
-    Constructor with an additional parameter for specifying the distance between elements.
+    .. cpp:function:: MatrixView(size_t height, size_t width, size_t dist, T *data)
 
-The constructors create a view of the matrix given its dimensions, data pointer, and optional distance between elements. MatrixView operates as a lightweight wrapper around existing data.
+        Constructor with an additional parameter for specifying the distance between elements.
 
-T is the data type of the matrix elements, and ORD specifies whether the matrix is in RowMajor or ColMajor order.
+    The constructors create a view of the matrix given its dimensions, data pointer, and optional distance between elements. MatrixView operates as a lightweight wrapper around existing data.
 
-.. admonition:: Important Note
-    :class: warning
+    T is the data type of the matrix elements, and ORD specifies whether the matrix is in RowMajor or ColMajor order.
 
-    MatrixView does not own the data; it merely provides a convenient way to access and manipulate the existing matrix.
+    .. admonition:: Important Note
+        :class: warning
 
-.. cpp:function:: MatrixView(const MatrixView<T, ORD> & A)
+        MatrixView does not own the data; it merely provides a convenient way to access and manipulate the existing matrix.
 
-    Copy constructor that creates a new MatrixView that shares the same data as the original, allowing for efficient and memory-safe matrix operations.
+    .. cpp:function:: MatrixView(const MatrixView<T, ORD> & A)
 
-.. cpp:function:: MatrixView &operator=(const MatrixView & M)
+        Copy constructor that creates a new MatrixView that shares the same data as the original, allowing for efficient and memory-safe matrix operations.
 
-    Assignment operator that sets the values of the current MatrixView to those of another MatrixView. The matrices must have the same dimensions.
+    .. cpp:function:: MatrixView &operator=(const MatrixView & M)
 
-.. cpp:function:: MatrixView &operator=(const MatrixExpr<TB> & M)
+        Assignment operator that sets the values of the current MatrixView to those of another MatrixView. The matrices must have the same dimensions.
 
-    Assignment operator that allows assigning the values of a MatrixExpr (such as another Matrix or MatrixView) to the current MatrixView.
+    .. cpp:function:: MatrixView &operator=(const MatrixExpr<TB> & M)
 
-.. cpp:function:: MatrixView &operator+=(const MatrixExpr<TB> & M)
+        Assignment operator that allows assigning the values of a MatrixExpr (such as another Matrix or MatrixView) to the current MatrixView.
 
-    Compound assignment operator that adds the values of a MatrixExpr to the current MatrixView. The matrices must have the same dimensions.
+    .. cpp:function:: MatrixView & operator= (std::initializer_list<T> list)
 
-.. cpp:function:: MatrixView &operator=(T scal)
+        Assigns the MatrixView values to those of an initializer list. Note that the values in the list are assumed to have the same ordering as the MatrixView.
 
-    Set all elements of the MatrixView to a scalar value.
+    .. cpp:function:: MatrixView &operator+=(const MatrixExpr<TB> & M)
 
-.. cpp:function:: MatrixView &operator*=(T scal)
+        Compound assignment operator that adds the values of a MatrixExpr to the current MatrixView. The matrices must have the same dimensions.
 
-    Multiply all elements of the MatrixView by a scalar value.
+    .. cpp:function:: MatrixView &operator=(T scal)
 
-.. cpp:function:: auto View() const
+        Set all elements of the MatrixView to a scalar value.
 
-    Returns a new MatrixView to the current object, allowing for further manipulations.
+    .. cpp:function:: MatrixView &operator*=(T scal)
 
-.. cpp:function:: size_t height() const
-.. cpp:function:: size_t width() const
+        Multiply all elements of the MatrixView by a scalar value.
 
-    Returns the dimensions of the matrix.
+    .. cpp:function:: auto View() const
 
-.. cpp:function:: T* Data()
+        Returns a new MatrixView to the current object, allowing for further manipulations.
 
-    Returns a pointer to the underlying data of the matrix.
+    .. cpp:function:: size_t height() const
+    .. cpp:function:: size_t width() const
 
-.. cpp:function:: size_t & Dist()
+        Returns the dimensions of the matrix.
 
-    Returns the distance in the data\_ array to the element next to/underneath it (depending on whether it is RowMajor (underneath) or ColMajor (next to)).
+    .. cpp:function:: T* Data()
 
-.. cpp:function:: T &operator()(size_t i, size_t j)
-.. cpp:function:: const T &operator()(size_t i, size_t j) const
+        Returns a pointer to the underlying data of the matrix.
 
-    Accesses the elements of the matrix using round brackets. The behavior depends on the ordering (RowMajor or ColMajor).
+    .. cpp:function:: size_t & Dist()
 
-.. cpp:function:: auto transposed() const
+        Returns the distance in the data\_ array to the element next to/underneath it (depending on whether it is RowMajor (underneath) or ColMajor (next to)).
 
-    Returns a transposed view of the matrix.
+    .. cpp:function:: T &operator()(size_t i, size_t j)
+    .. cpp:function:: const T &operator()(size_t i, size_t j) const
 
-.. cpp:function:: auto Row(size_t i)
-.. cpp:function:: auto Col(size_t j)
+        Accesses the elements of the matrix using round brackets. The behavior depends on the ordering (RowMajor or ColMajor).
 
-    Returns a VectorView representing the i-th row or j-th column of the matrix.
+    .. cpp:function:: auto transposed() const
 
-.. cpp:function:: auto Diag()
+        Returns a transposed view of the matrix.
 
-    Returns a VectorView representing the diagonal of the matrix.
+    .. cpp:function:: auto Row(size_t i)
+    .. cpp:function:: auto Col(size_t j)
 
-.. cpp:function:: auto Rows(size_t start, size_t height)
-.. cpp:function:: auto Cols(size_t start, size_t width)
+        Returns a VectorView representing the i-th row or j-th column of the matrix.
 
-    Returns a MatrixView representing a submatrix obtained by selecting a range of rows or columns.
+    .. cpp:function:: auto Diag()
 
-.. cpp:function:: void swapcols(size_t i, size_t j)
+        Returns a VectorView representing the diagonal of the matrix.
 
-    Swaps two columns of the matrix efficiently using row-wise swapping.
+    .. cpp:function:: auto Rows(size_t start, size_t height)
+    .. cpp:function:: auto Cols(size_t start, size_t width)
+
+        Returns a MatrixView representing a submatrix obtained by selecting a range of rows or columns.
+
+    .. cpp:function:: void swapcols(size_t i, size_t j)
+
+        Swaps two columns of the matrix efficiently using row-wise swapping.
 
 
 
